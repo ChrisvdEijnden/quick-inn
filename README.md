@@ -1,1 +1,1 @@
-# quick_inn2
+# quick_inn
