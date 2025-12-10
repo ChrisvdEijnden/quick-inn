@@ -1,0 +1,26 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Support{% endblock %}
+
+{% block content %}
+<div class="support-container">
+    <h1>Welkom bij het Help Centre</h1>
+    <p>Log in om contact op te nemen met de Klantenservice, we staan 24 uur per dag voor je klaar.</p>
+    <div class="support-content-container">
+        <div>
+            <div class="column">
+                <h3 id="h3-header">Stuur ons een bericht</h3>
+                <p>Neem contact op met onze medewerkers over je boeking, en je krijgt zo snel mogelijk antwoord.</p>
+            </div>
+            <div class="column">
+                <h3 id="h3-header">Bel ons</h3>
+                <p>Voor urgente zaken kun je ons 24/7 op een lokaal of internationaal telefoonnummer bereiken.</p>
+            </div>
+        </div>
+        <div class="sign-in-btns">
+            <a href="{% url 'login' %}" id="login-btn">Inloggen</a>
+            <a href="{% url 'login' %}" class="no-account-btn">Doorgaan zonder account</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

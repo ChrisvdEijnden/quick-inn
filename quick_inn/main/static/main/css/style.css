@@ -1,0 +1,305 @@
+/* ================= GLOBAL STYLES ================= */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+h1 {
+    margin-top: 20px;
+    margin-bottom: 0px;
+    color: #000;
+}
+
+.login-content-container #h3-header { 
+    margin: 10px;
+}    
+
+#h3-header {
+    color: #000;
+    font-weight: bold;
+    margin: 0px;
+}
+
+.big-header {
+    position: fixed;
+    top: 160px;
+    width: 100%;
+    font-size: clamp(3rem, 12vw, 12rem);
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+    padding: 30px 0;
+    z-index: 2;
+    pointer-events: none;
+    font-family: sans-serif;
+}
+
+/* ================= NAVIGATION ================= */
+.navbar {
+    position: sticky; 
+    top: 0; 
+    height: 30px;
+    overflow: hidden; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 15px 15px; 
+    background-color: black;
+    z-index: 1000;
+}
+
+.navbar__left {
+    display: flex;
+    align-items: center;
+}
+.navbar__right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.navbar-btn {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 50px;
+    transition: background-color 0.3s ease;
+}
+.navbar-btn:hover {
+    background-color: #1b1b1b;
+}
+
+/* ================= BUTTONS (Outside Nav) ================= */
+
+#login-btn, #qrcode-button {
+    background-color: #007bff;
+    border: 2px solid #007bff;
+    padding: 7px 12px;
+    border-radius: 50px;
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    width: fit-content;
+    height: min-content;
+    cursor: pointer;
+}
+#login-btn:hover, #qrcode-button:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.no-account-btn, .google-sign-in-btn {
+    background-color: transparent;
+    border: 2px solid #007bff;
+    padding: 7px 12px;
+    border-radius: 50px;
+    color: #007bff;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 1rem;
+    width: fit-content;
+    height: min-content;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.no-account-btn:hover, .google-sign-in-btn:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    color: white;
+}
+
+.return-btn:hover {
+    text-decoration: underline;
+}
+
+.google-sign-in-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+#hamburger-icon {
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+    padding: 7px;
+    border: 1px solid transparent;
+    border-radius: 50px;
+    display: inline-block;
+    line-height: 0;
+}
+#hamburger-icon:hover {
+    background-color: #1b1b1b;
+    border-color: #1b1b1b;
+}
+
+/* ================= FORMS ================= */
+form label {
+    font-weight: bold;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="email"],
+form textarea {
+    width: 400px;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+#qrcode-url {
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    min-width: 250px;
+}
+
+/* ================= CONTAINERS ================= */
+.home-container,
+
+.login-container {
+    padding: 20px;
+    place-items: center;
+}
+
+.support-container {
+    display: grid;
+    place-items: center;
+}
+
+.support-content-container {
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.sign-in-btns {
+    gap: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.qrcode-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.login-content-container, .qrcode-container {
+    place-items: center;
+    margin: 20px;
+    margin-bottom: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    width: min-content;
+}
+
+.login-content-container {
+    text-align: center;
+}
+
+.qrcode-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+
+.column {
+    font-family: sans-serif;
+    text-align: left;
+    float: left;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+/* ================= IMAGES & MEDIA ================= */
+.home-image {
+    width: 100%;
+    aspect-ratio: 3 / 1;
+    object-fit: cover;
+    margin: 0;
+}
+
+.qrcode-holder, .qrcode-image {
+    width: 120px;
+    height: 120px;
+}
+
+.qrcode-holder {
+    border: 2px solid #007bff;
+    overflow: hidden;
+}
+
+.qrcode-image {
+    scale: 1.15;
+    font-size: 0.8rem;
+}
+
+.google-sign-in-btn img {
+    width: 18px;
+    height: 18px;
+}
+
+.parallax {
+    background-image: url("/static/main/images/homepage_high_res.jpg");
+    width: 100%;
+    aspect-ratio: 3/1;
+    background-attachment: fixed;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1;
+}
+
+/* ================= UTILITY CLASSES ================= */
+.home-text {
+    height: 1000px;
+    margin: 20px;
+    position: relative;
+    z-index: 3;
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1rem;
+    color: #6b7280;
+    text-decoration: none;
+}
+
+.register-link button, .return-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    color: #007bff;
+    font-size: 1rem;
+}
+.register-link button:hover {
+    text-decoration: underline;
+}
+
+#return-home {
+    display: block;
+    margin: 10px auto 0 auto; /* centers it horizontally */
+    text-align: center;
+}
