@@ -1,6 +1,9 @@
 *.pyc
 __pycache__/
 db.sqlite3
-.env
 *.log
+.env
+.env.*
+!.env.example
+.env.save
 .DS_Store
