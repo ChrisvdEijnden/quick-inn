@@ -703,7 +703,7 @@ p {
 .cookie-modal-content {
     background-color: #000;
     padding: 40px;
-    border-radius: 24px;
+    border-radius: 40px;
     max-width: 600px;
     width: 100%;
     max-height: 90vh;
@@ -724,13 +724,6 @@ p {
     }
 }
 
-.cookie-modal-content h2 {
-    color: #fff;
-    margin: 0 0 10px 0;
-    font-size: 1.8rem;
-    font-weight: 600;
-}
-
 .cookie-modal-content > p {
     color: rgba(255, 255, 255, 0.7);
     margin: 0 0 30px 0;
@@ -742,7 +735,7 @@ p {
     margin: 0 0 20px;
     padding: 20px;
     background-color: #1a1a1a;
-    border-radius: 12px;
+    border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -755,6 +748,10 @@ p {
     align-items: flex-start;
     cursor: pointer;
     gap: 12px;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #fff;
+    line-height: 1.3;
 }
 
 .cookie-option input[type="checkbox"] {
@@ -765,6 +762,10 @@ p {
     flex-shrink: 0;
     accent-color: #2c72dc;
 }
+.cookie-option input[type="checkbox"]:hover {
+    accent-color: #2a6fd4;
+}
+
 
 .cookie-option input[type="checkbox"]:disabled {
     cursor: not-allowed;
@@ -780,6 +781,7 @@ p {
     color: #fff;
     font-weight: 600;
     margin-bottom: 4px;
+    line-height: 1.3;
 }
 
 .cookie-option p {
@@ -787,7 +789,7 @@ p {
     font-size: 0.9rem;
     font-weight: 400;
     color: rgba(255, 255, 255, 0.6);
-    line-height: 1.5;
+    line-height: 1.3;
 }
 
 .cookie-modal-buttons {
