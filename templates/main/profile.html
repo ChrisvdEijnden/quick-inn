@@ -8,7 +8,7 @@
 <div class="profile-wrapper">
     <h1>Account information</h1>
     
-    <form method="POST" action="{% url 'profile' %}">
+    <form method="POST" action="{% url 'profile' %}" class = "profile-form">
         {% csrf_token %}
         
         <div class="form-group">
@@ -88,9 +88,28 @@
         <button type="submit" class="save-btn">SAVE</button>
     </form>
 
-    <form method="POST" action="{% url 'logout' %}">
+    <h1 style="margin-top: 40px;">Change Password</h1>
+    <form method="POST" action="{% url 'profile' %}">
         {% csrf_token %}
-        <button type="submit" class="logout-btn">LOG OUT</button>
+        
+        <div class="form-group">
+            <label for="password">CURRENT PASSWORD</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <div class="form-group">
+            <label for="new-password">NEW PASSWORD</label>
+            <input type="password" id="new-password" name="new-password">
+        </div>
+
+        <div class="profile-button-row">
+            <button type="submit" class="save-btn">SAVE</button>
+            <button type="button" class="logout-btn">LOG OUT</button>
+        </div>
+    </form>
+
+    <form id="logout-form" method="POST" action="{% url 'logout' %}" style="display: none;">
+        {% csrf_token %}
     </form>
 </div>
 {% endblock %}

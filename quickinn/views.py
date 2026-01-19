@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth import authenticate, login, logout, get_user_model, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -26,7 +26,7 @@ def profile_view(request):
         "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon",
         "Canada", "Cape Verde", "Central African Republic", "Chad", "Chile",
         "China", "Colombia", "Comoros", "Congo", "Costa Rica",
-        "Côte d’Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic",
+        "Côte d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic",
         "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador",
         "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia",
         "Eswatini", "Ethiopia", "Fiji", "Finland", "France",
@@ -59,40 +59,63 @@ def profile_view(request):
         "Zambia", "Zimbabwe",
     ]
 
-
     if request.method == 'POST':
-        user = request.user
+        # Check if it's a password change request
+        if 'new_password' in request.POST:
+            current_password = request.POST.get('password', '').strip()
+            new_password = request.POST.get('new_password', '').strip()
+            
+            if not request.user.check_password(current_password):
+                messages.error(request, 'Current password is incorrect.')
+                return redirect('profile')
+            
+            if len(new_password) < 8:
+                messages.error(request, 'Password must be at least 8 characters long.')
+                return redirect('profile')
+            
+            request.user.set_password(new_password)
+            request.user.save()
+            
+            update_session_auth_hash(request, request.user)
+            
+            messages.success(request, 'Password changed successfully!')
+            return redirect('profile')
         
-        user.first_name = request.POST.get('first_name', '').strip()
-        user.last_name = request.POST.get('last_name', '').strip()
-        user.email = request.POST.get('email', '').strip()
-        
-        user.country_code = request.POST.get('country_code', '+31')
-        
-        phone = request.POST.get('phone_number', '').strip()
-        user.phone_number = phone if phone else ''
-        
-        gender = request.POST.get('gender', '').strip()
-        user.gender = gender if gender else ''
-        
-        dob = request.POST.get('date_of_birth', '').strip()
-        user.date_of_birth = dob if dob else None
+        # Otherwise, it's a profile update request
+        else:
+            user = request.user
+            
+            user.first_name = request.POST.get('first_name', '').strip()
+            user.last_name = request.POST.get('last_name', '').strip()
+            user.email = request.POST.get('email', '').strip()
+            
+            user.country_code = request.POST.get('country_code', '+31')
+            
+            phone = request.POST.get('phone_number', '').strip()
+            user.phone_number = phone if phone else ''
+            
+            gender = request.POST.get('gender', '').strip()
+            user.gender = gender if gender else ''
+            
+            dob = request.POST.get('date_of_birth', '').strip()
+            user.date_of_birth = dob if dob else None
 
-        nat = request.POST.get('nationality', '').strip()
-        user.nationality = nat if nat else ''
+            nat = request.POST.get('nationality', '').strip()
+            user.nationality = nat if nat else ''
 
-        user.street_address = request.POST.get('street_address')
-        user.city = request.POST.get('city')
-        user.postal_code = request.POST.get('postal_code')
+            user.street_address = request.POST.get('street_address', '').strip()
+            user.city = request.POST.get('city', '').strip()
+            user.postal_code = request.POST.get('postal_code', '').strip()
 
-        user.save() 
-        
-        messages.success(request, 'Your profile was successfully updated!')
-        return redirect('home')
+            user.save() 
+            
+            messages.success(request, 'Your profile was successfully updated!')
+            return redirect('profile')
+    
     return render(request, 'main/profile.html', {
-                'user': request.user,
-                'nationalities': nationalities
-                })
+        'user': request.user,
+        'nationalities': nationalities
+    })
 
 def support(request):
     return render(request, 'main/support.html')
@@ -129,7 +152,6 @@ def signup_view(request):
         password = request.POST.get('password')
         password_confirm = request.POST.get('password_confirm')
         
-        # Validation
         if password != password_confirm:
             messages.error(request, 'Passwords do not match')
             return render(request, 'main/signup.html')
@@ -138,7 +160,6 @@ def signup_view(request):
             messages.error(request, 'Email already registered')
             return render(request, 'main/signup.html')
         
-        # Create user (username will be email)
         user = User.objects.create_user(
             username=email,
             email=email,
