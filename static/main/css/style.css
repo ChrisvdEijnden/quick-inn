@@ -571,6 +571,25 @@ p {
     color: #fff;
 }
 
+.show-btn {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: rgba(0, 32, 161, 1);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    padding: 4px 8px;
+    font-weight: 500;
+}
+
+.show-btn:hover {
+    color: #002197;
+}
 
 .profile-form > .save-btn {
     width: 100%;
