@@ -40,3 +40,46 @@ function togglePassword(inputId, button) {
         button.textContent = 'SHOW';
     }
 }
+
+const gallery = document.getElementById('gallery'); // or querySelector('.hiw-gallery')
+const scrollTrack = document.querySelector('.scroll-track');
+
+function calculateMaxScroll() {
+  const galleryWidth = gallery.scrollWidth;
+  const viewportWidth = gallery.parentElement.offsetWidth;
+  return galleryWidth - viewportWidth;
+}
+
+function handleScroll() {
+  const trackRect = scrollTrack.getBoundingClientRect();
+  const trackTop = trackRect.top;
+  const trackHeight = trackRect.height;
+  const viewportHeight = window.innerHeight;
+  
+  let progress = 0;
+  
+  if (trackTop <= 0 && trackTop > -trackHeight + viewportHeight) {
+    progress = Math.abs(trackTop) / (trackHeight - viewportHeight);
+    progress = Math.max(0, Math.min(1, progress));
+  } else if (trackTop <= -trackHeight + viewportHeight) {
+    progress = 1;
+  }
+  
+  const maxScroll = calculateMaxScroll();
+  const scrollAmount = progress * maxScroll;
+  gallery.style.transform = `translateX(-${scrollAmount}px)`;
+}
+
+let ticking = false;
+window.addEventListener('scroll', () => {
+  if (!ticking) {
+    window.requestAnimationFrame(() => {
+      handleScroll();
+      ticking = false;
+    });
+    ticking = true;
+  }
+});
+
+window.addEventListener('resize', handleScroll);
+handleScroll();

@@ -4,18 +4,6 @@
 {% block title %}Home - QuickInn{% endblock %}
 
 {% block content %}
-<div id="cookie-banner" class="cookie-banner">
-    <div class="cookie-content">
-        <div class="cookie-text">
-            <p>We use cookies to improve your experience on our site. By continuing to browse, you accept our use of cookies.</p>
-        </div>
-        <div class="cookie-buttons">
-            <button id="accept-cookies" class="cookie-btn accept-btn">Accept All</button>
-            <button id="decline-cookies" class="cookie-btn decline-btn">Decline</button>
-            <button id="customize-cookies" class="cookie-btn customize-btn">Customize</button>
-        </div>
-    </div>
-</div>
 
 <div id="cookie-modal" class="cookie-modal">
     <div class="cookie-modal-content">
@@ -83,10 +71,35 @@
         <p>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore cumque alias delectus quis dolorem saepe debitis consequatur nostrum. Doloribus quae vel atque maiores repudiandae blanditiis at ipsam quibusdam quaerat facilis!
         </p>
+        <div class="scroll-track">
+            <div class="hiw-gallery-sticky">
+                <div class="hiw-gallery" id="gallery">
+                    <div class="hiw-item">1</div>
+                    <div class="hiw-item">2</div>
+                    <div class="hiw-item">3</div>
+                    <div class="hiw-item">4</div>
+                </div>
+            </div>
+        </div>
+        
         <button class="gallery-button">Create a QR-Code</button>
     </section>
 
 </div>
+
+<div id="cookie-banner" class="cookie-banner">
+    <div class="cookie-content">
+        <div class="cookie-text">
+            <p>We use cookies to improve your experience on our site. By continuing to browse, you accept our use of cookies.</p>
+        </div>
+        <div class="cookie-buttons">
+            <button id="accept-cookies" class="cookie-btn accept-btn">Accept All</button>
+            <button id="decline-cookies" class="cookie-btn decline-btn">Decline</button>
+            <button id="customize-cookies" class="cookie-btn customize-btn">Customize</button>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block extra_js %}

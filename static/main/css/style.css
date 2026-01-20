@@ -172,7 +172,8 @@ p {
 
 /* Content & Info Section */
 .content {
-    padding: 2rem;
+    padding: 2rem 0;
+    align-items: center;
 }
 
 .info-section {
@@ -212,6 +213,56 @@ p {
     height: 100%;
     object-fit: cover;
     display: block;
+}
+
+.scroll-track {
+  height: 400vh; /* Creates vertical scroll space */
+  position: relative;
+}
+
+.hiw-gallery-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hiw-gallery {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+  margin: 0;
+}
+
+.hiw-item {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  aspect-ratio: 3 / 4;
+  height: auto;
+  background-color: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  font-weight: 600;
+}
+
+/* Mobile: ~1.2 items visible */
+@media (max-width: 767px) {
+  .hiw-item {
+    width: calc(83.33% - 10px); 
+  }
+}
+
+/* Laptop: ~1.66 items visible */
+@media (min-width: 768px) {
+  .hiw-item {
+    width: calc(60% - 10px);
+  }
 }
 
 /* Login Page Styles */
