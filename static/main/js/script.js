@@ -12,7 +12,6 @@ window.addEventListener('scroll', function() {
     }
 });
 
-// Get Started button scroll functionality
 document.addEventListener('DOMContentLoaded', function() {
     const buttons = document.querySelectorAll('.parallax-content button, .gallery-button');
     
