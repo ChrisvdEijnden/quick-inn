@@ -26,10 +26,14 @@
             
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <div style="position: relative;">
+                    <input type="password" id="password" name="password" required>
+                    <button type="button" class="show-btn" onclick="togglePassword('new_password', this)">SHOW</button>
+                </div>
             </div>
             
             <button type="submit" class="login-submit-btn">Sign In</button>
+
         </form>
         
         <div class="divider">

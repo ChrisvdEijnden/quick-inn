@@ -1,3 +1,4 @@
+// Parallax Scrolling Effect
 window.addEventListener('scroll', function() {
     const parallax = document.querySelector('.parallax-bg');
     const parallaxContent = document.querySelector('.parallax-content');
@@ -12,6 +13,7 @@ window.addEventListener('scroll', function() {
     }
 });
 
+// Smooth Scroll to Bottom on Button Click
 document.addEventListener('DOMContentLoaded', function() {
     const buttons = document.querySelectorAll('.parallax-content button, .gallery-button');
     
@@ -25,10 +27,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Google Login Function
 function handleGoogleLogin() {
     window.location.href = "{% url 'social:begin' 'google-oauth2' %}";
 }
-
+// Show/Hide Password Function
 function togglePassword(inputId, button) {
     const input = document.getElementById(inputId);
     
@@ -41,6 +44,17 @@ function togglePassword(inputId, button) {
     }
 }
 
+// Logout Button Handler
+document.addEventListener('DOMContentLoaded', function() {
+  const logoutBtn = document.querySelector('.profile-button-row .logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', function() {
+      document.getElementById('logout-form').submit();
+    });
+  }
+});
+
+// Scroll jacking HIW Gallery
 const gallery = document.getElementById('gallery'); // or querySelector('.hiw-gallery')
 const scrollTrack = document.querySelector('.scroll-track');
 
