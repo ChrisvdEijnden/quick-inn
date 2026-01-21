@@ -1,99 +1,101 @@
-// Parallax Scrolling Effect
-window.addEventListener('scroll', function() {
-    const parallax = document.querySelector('.parallax-bg');
-    const parallaxContent = document.querySelector('.parallax-content');
-    let scrollPosition = window.pageYOffset;
-    
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("script.js loaded");
+
+// Parallax effect
+  window.addEventListener("scroll", () => {
+    const parallax = document.querySelector(".parallax-bg");
+    const parallaxContent = document.querySelector(".parallax-content");
+    const scrollY = window.pageYOffset;
+
     if (parallax) {
-        parallax.style.transform = 'translateY(' + scrollPosition * 0.6 + 'px)';
+      parallax.style.transform = `translateY(${scrollY * 0.6}px)`;
     }
-    
+
     if (parallaxContent) {
-        parallaxContent.style.transform = 'translate(-50%, -50%) translateY(' + scrollPosition * -0.8 + 'px)';
+      parallaxContent.style.transform =
+        `translate(-50%, -50%) translateY(${scrollY * -0.8}px)`;
     }
-});
+  });
 
-// Smooth Scroll to Bottom on Button Click
-document.addEventListener('DOMContentLoaded', function() {
-    const buttons = document.querySelectorAll('.parallax-content button, .gallery-button');
-    
-    buttons.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            window.scrollTo({
-                top: document.body.scrollHeight,
-                behavior: 'smooth'
-            });
+// Parallax button
+  document
+    .querySelectorAll(".parallax-content button, .gallery-button")
+    .forEach(btn => {
+      btn.addEventListener("click", () => {
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: "smooth"
         });
+      });
     });
-});
 
-// Google Login Function
-function handleGoogleLogin() {
-    window.location.href = "{% url 'social:begin' 'google-oauth2' %}";
-}
-// Show/Hide Password Function
-function togglePassword(inputId, button) {
-    const input = document.getElementById(inputId);
-    
-    if (input.type === 'password') {
-        input.type = 'text';
-        button.textContent = 'HIDE';
-    } else {
-        input.type = 'password';
-        button.textContent = 'SHOW';
-    }
-}
-
-// Logout Button Handler
-document.addEventListener('DOMContentLoaded', function() {
-  const logoutBtn = document.querySelector('.profile-button-row .logout-btn');
+// Logout button
+  const logoutBtn = document.querySelector(".profile-button-row .logout-btn");
   if (logoutBtn) {
-    logoutBtn.addEventListener('click', function() {
-      document.getElementById('logout-form').submit();
+    logoutBtn.addEventListener("click", () => {
+      document.getElementById("logout-form")?.submit();
     });
   }
-});
 
-// Scroll jacking HIW Gallery
-const gallery = document.getElementById('gallery'); // or querySelector('.hiw-gallery')
-const scrollTrack = document.querySelector('.scroll-track');
+// Scroll jacking
+  const gallery = document.getElementById("gallery");
+  const scrollTrack = document.querySelector(".scroll-track");
 
-function calculateMaxScroll() {
-  const galleryWidth = gallery.scrollWidth;
-  const viewportWidth = gallery.parentElement.offsetWidth;
-  return galleryWidth - viewportWidth;
-}
+  if (gallery && scrollTrack) {
+    let currentX = 0; let targetX = 0; let maxScroll = 0;
+    let trackStart = 0; let trackEnd = 0;
 
-function handleScroll() {
-  const trackRect = scrollTrack.getBoundingClientRect();
-  const trackTop = trackRect.top;
-  const trackHeight = trackRect.height;
-  const viewportHeight = window.innerHeight;
-  
-  let progress = 0;
-  
-  if (trackTop <= 0 && trackTop > -trackHeight + viewportHeight) {
-    progress = Math.abs(trackTop) / (trackHeight - viewportHeight);
-    progress = Math.max(0, Math.min(1, progress));
-  } else if (trackTop <= -trackHeight + viewportHeight) {
-    progress = 1;
-  }
-  
-  const maxScroll = calculateMaxScroll();
-  const scrollAmount = progress * maxScroll;
-  gallery.style.transform = `translateX(-${scrollAmount}px)`;
-}
+    function measure() {
+      const rect = scrollTrack.getBoundingClientRect();
+      trackStart = window.scrollY + rect.top;
+      trackEnd = trackStart + rect.height - window.innerHeight;
 
-let ticking = false;
-window.addEventListener('scroll', () => {
-  if (!ticking) {
-    window.requestAnimationFrame(() => {
-      handleScroll();
-      ticking = false;
+      maxScroll =
+        gallery.scrollWidth - gallery.parentElement.offsetWidth;
+    }
+
+    function updateTarget() {
+      const y = window.scrollY;
+      let progress = (y - trackStart) / (trackEnd - trackStart);
+      progress = Math.max(0, Math.min(1, progress));
+      targetX = progress * maxScroll;
+    }
+
+    function animate() {
+      const delta = targetX - currentX;
+
+      // Value first converging asymptotically towards 0: snap to 0 when smaller than 0.1
+      if (Math.abs(delta) < 0.1) {
+        currentX = targetX;
+      } else {
+        currentX += delta * 0.12;
+      }
+
+      gallery.style.transform =
+        `translate3d(-${currentX}px, 0, 0)`;
+
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener("scroll", updateTarget);
+    window.addEventListener("resize", () => {
+      measure();
+      updateTarget();
     });
-    ticking = true;
+
+    measure();
+    updateTarget();
+    animate();
   }
+
 });
 
-window.addEventListener('resize', handleScroll);
-handleScroll();
+// Password show/hide
+function togglePassword(inputId, button) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+
+  const isPassword = input.type === "password";
+  input.type = isPassword ? "text" : "password";
+  button.textContent = isPassword ? "HIDE" : "SHOW";
+}

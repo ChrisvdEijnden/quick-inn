@@ -28,7 +28,7 @@
                 <label for="password">Password</label>
                 <div style="position: relative;">
                     <input type="password" id="password" name="password" required>
-                    <button type="button" class="show-btn" onclick="togglePassword('new_password', this)">SHOW</button>
+                    <button type="button" class="show-btn" onclick="togglePassword('password', this)">SHOW</button>
                 </div>
             </div>
             
@@ -58,5 +58,10 @@
 function handleGoogleLogin() {
     window.location.href = "{% url 'social:begin' 'google-oauth2' %}";
 }
+
 </script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'main/js/script.js' %}"></script>
 {% endblock %}
