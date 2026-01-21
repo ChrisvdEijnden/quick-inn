@@ -215,8 +215,10 @@ p {
     display: block;
 }
 
+/* HIW Gallery */
 .scroll-track {
-    height: 400vh; /* Creates vertical scroll space */
+    height: 400vh;
+    margin: 1rem;
     position: relative;
 }
 
@@ -930,6 +932,7 @@ p {
     color: #fff;
     padding: 2rem;
     text-align: center;
+    margin-top: 100px;
 }
 
 .footer-content p {
