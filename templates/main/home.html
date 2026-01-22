@@ -65,23 +65,38 @@
     </div>
 </section>
 
-<div class="content">
-    <section class="info-section">
+<div class="content" style="background-color: #f5f5f5;">
+    <section class="hiw-section">
         <h2>How it works</h2>
         <p>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore cumque alias delectus quis dolorem saepe debitis consequatur nostrum. Doloribus quae vel atque maiores repudiandae blanditiis at ipsam quibusdam quaerat facilis!
         </p>
-        <div class="scroll-track">
-            <div class="hiw-gallery-sticky">
-                <div class="hiw-gallery" id="gallery">
-                    <div class="hiw-item">1</div>
-                    <div class="hiw-item">2</div>
-                    <div class="hiw-item">3</div>
-                    <div class="hiw-item">4</div>
-                </div>
+        <div class="hiw-gallery" id="gallery">
+            <div class="hiw-item">
+                <img src="{% static '/main/icons/creditcard@10x.png' %}">
+                <h3>Book</h3>
+                <p>Choose what you need, pick a time that works for you, and book in just a few clicks.</p>
             </div>
+
+            <div class="hiw-item">
+                <img src="{% static '/main/icons/plus.app@10x.png' %}">
+                <h3>Create</h3>
+                <p>Create a quick request with your details so the right person knows exactly what to expect.</p>
+            </div>
+
+            <div class="hiw-item">
+                <img src="{% static '/main/icons/qrcode.viewfinder@10x.png' %}">
+                <h3>Scan</h3>
+                <p>Scan the QR code on arrival to securely check in and confirm the start of the job.</p>
+            </div>
+
+            <div class="hiw-item">
+                <img src="{% static '/main/icons/suitcase.rolling.and.suitcase@10x.png' %}">
+                <h3>Enjoy</h3>
+                <p>Sit back and relax while everything gets taken care of — simple and stress-free.</p>
+            </div>                  <!-- Enjoy -->
         </div>
-        
+
         <button class="gallery-button">Create a QR-Code</button>
     </section>
 </div>

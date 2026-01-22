@@ -178,23 +178,26 @@ p {
     align-items: center;
 }
 
-.info-section {
-    max-width: 800px;
+.info-section, .hiw-section {
     margin: 0 auto;
     padding: 0.5rem 0;
     text-align: center;
 }
 
-.info-section h2 {
+.info-section h2, .hiw-section h2 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
     color: #333;
 }
 
-.info-section p {
+.info-section p, .hiw-section p {
+    margin: 0 auto;
     font-size: 1.1rem;
     line-height: 1.8;
     color: #666;
+    width: 90%;
+    max-width: 800px;
+
 }
 
 /* Image Gallery */
@@ -206,7 +209,7 @@ p {
 
 .gallery-item {
     width: 100%;
-    aspect-ratio: 3/4;
+    aspect-ratio: 2/3;
     overflow: hidden;
 }
 
@@ -217,43 +220,82 @@ p {
     display: block;
 }
 
-/* HIW Gallery */
-.scroll-track {
-    height: 400vh; /* Controls scroll speed*/
-    margin: 1rem;
-    position: relative;
-}
 
-.hiw-gallery-sticky {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-}
-
+/* HIW Gallery - Dynamic scroll-jacking */
 .hiw-gallery {
     display: flex;
-    gap: 10px;
+    gap: 20px;
     width: 100%;
     will-change: transform;
-    transition: transform 0.1s ease-out;
     margin: 0;
+    padding: 1rem 0 1rem 20%;
+}
+
+.hiw-section {
+    padding-bottom: 4rem;
 }
 
 .hiw-item {
     flex-shrink: 0;
-    scroll-snap-align: start;
-    background-color: #ddd;
+    border-radius: 24px;
+    background-color: #fff;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 48px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 3rem 2.5rem;
+    width: 400px;
+    min-height: 350px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hiw-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.hiw-item img {
+    height: 64px;
+    width: 64px;
+    margin: 0 0 2rem 0;
+    object-fit: contain;
+}
+
+.hiw-item h3 {
+    font-size: 1.75rem;
     font-weight: 600;
-    width: clamp(90%, 250px, 350px);
-    aspect-ratio: 3 / 4;
-    height: auto;
+    margin: 0 0 1rem 0;
+    color: #1d1d1f;
+    line-height: 1.2;
+}
+
+.hiw-item p {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #6e6e73;
+    margin: 0;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .hiw-item {
+        width: 320px;
+        min-height: 300px;
+        padding: 2rem 1.5rem;
+    }
+
+    .hiw-gallery-sticky {
+        padding: 0 1rem;
+    }
+
+    .hiw-item img {
+        height: 48px;
+        width: 48px;
+    }
+
+    .hiw-item h3 {
+        font-size: 1.5rem;
+    }
 }
 
 /* Login Page Styles */
@@ -441,10 +483,8 @@ p {
 .profile-wrapper h1 {
     font-size: 1.5rem;
     font-weight: 400;
-    margin: 0;
     color: #000;
-    margin-bottom: 0.5rem;
-
+    margin: 0 0 0.5rem;
 }
 
 .profile-wrapper label, .form-group label {
@@ -574,7 +614,6 @@ p {
 }
 
 .google-login-btn {
-    justify-content: flex-start;
     justify-content: space-evenly;
 }
 
@@ -662,16 +701,16 @@ p {
     width: auto;
     min-width: 400px;
     max-width: 700px;
-    
+
+    padding: 30px;
+
     background-color: rgba(0, 0, 0, 0.95);
     color: white;
-    padding: 8px 20px;
     border-radius: 40px;
     z-index: 10000;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
-    padding: 30px;
 }
 
 .cookie-content {
