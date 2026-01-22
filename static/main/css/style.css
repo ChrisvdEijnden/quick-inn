@@ -2,8 +2,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    overscroll-behavior: none;
+}
 
+html, body {
+    overscroll-behavior: none;
 }
 
 body {
@@ -179,7 +181,7 @@ p {
 .info-section {
     max-width: 800px;
     margin: 0 auto;
-    padding: 0.5rem auto;
+    padding: 0.5rem 0;
     text-align: center;
 }
 
@@ -217,7 +219,7 @@ p {
 
 /* HIW Gallery */
 .scroll-track {
-    height: 400vh;
+    height: 400vh; /* Controls scroll speed*/
     margin: 1rem;
     position: relative;
 }
