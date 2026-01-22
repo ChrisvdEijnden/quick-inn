@@ -118,13 +118,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+
+# Authentication backends
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
@@ -136,8 +137,9 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET', de
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', 'profile']
 
 # Redirect URLs
-LOGIN_URL = 'login'  # Where to redirect if user needs to log in
-LOGOUT_REDIRECT_URL = 'home'  # Where to redirect after logout
-LOGIN_REDIRECT_URL = 'profile'  # Where to redirect after login
+LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'profile'
 
+# Custom User Model
 AUTH_USER_MODEL = 'quickinn.CustomUser'
