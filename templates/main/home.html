@@ -67,10 +67,6 @@
 
 <div class="content" style="background-color: #f5f5f5;">
     <section class="hiw-section">
-        <h2>How it works</h2>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore cumque alias delectus quis dolorem saepe debitis consequatur nostrum. Doloribus quae vel atque maiores repudiandae blanditiis at ipsam quibusdam quaerat facilis!
-        </p>
         <div class="hiw-gallery" id="gallery">
             <div class="hiw-item">
                 <img src="{% static '/main/icons/creditcard@10x.png' %}" alt="creditcard icon">
@@ -97,14 +93,16 @@
             </div>                  <!-- Enjoy -->
         </div>
 
-        <button class="gallery-button">Create a QR-Code</button>
-        <div class="chevron-buttons">
-            <button id="chevron-btn-left">
-                <img src="{% static '/main/icons/chevron.left@4x.png' %}" class="chevron-icon" alt="chevron left">
-            </button>
-            <button id="chevron-btn-right">
-                <img src="{% static '/main/icons/chevron.right@4x.png' %}" class="chevron-icon" alt="chevron right">
-            </button>
+        <div class="hiw-buttons">
+            <a href="/tickets/" class="gallery-button">Create a QR-Code</a>
+            <div class="chevron-buttons">
+                <button id="chevron-btn-left">
+                    <img src="{% static '/main/icons/chevron.left@4x.png' %}" class="chevron-icon" alt="chevron left">
+                </button>
+                <button id="chevron-btn-right">
+                    <img src="{% static '/main/icons/chevron.right@4x.png' %}" class="chevron-icon" alt="chevron right">
+                </button>
+            </div>
         </div>
     </section>
 </div>

@@ -1,4 +1,3 @@
-// Alles binnen DOMContentLoaded zodat de DOM beschikbaar is
 document.addEventListener('DOMContentLoaded', function() {
 
     // ---- Parallax Scrolling Effect ----
@@ -17,14 +16,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // ---- Smooth Scroll to Bottom on Button Click ----
-    const buttons = document.querySelectorAll('.parallax-content button, .gallery-button');
-    buttons.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            window.scrollTo({
-                top: document.body.scrollHeight,
-                behavior: 'smooth'
-            });
+    // ---- Smooth Scroll on Button Click ----
+    const buttons = Array.from(document.querySelectorAll('.parallax-content button, .gallery-button'));
+    buttons.forEach((btn, index) => {
+        btn.addEventListener('click', () => {
+            const nextButton = buttons[index + 1];
+
+            if (nextButton) {
+                const offset = 450;
+                const elementPosition = nextButton.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
         });
     });
 
@@ -39,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ---- Intersection Observer voor .hiw-item ----
     const hiwItems = document.querySelectorAll(".hiw-item");
     if (hiwItems.length > 0) {
         const observer = new IntersectionObserver((entries) => {
@@ -55,7 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ---- Show/Hide Password Function ----
-// Staat buiten DOMContentLoaded omdat dit via onClick kan worden aangeroepen
 function togglePassword(inputId, button) {
     const input = document.getElementById(inputId);
     if (!input || !button) return;
@@ -87,5 +92,38 @@ if (gallery) {
         btnRight.addEventListener('click', () => {
             gallery.scrollBy({ left: scrollAmount, behavior: 'smooth' });
         });
+    }
+}
+
+// ---- Passport handling"
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+    const fileInfo = document.getElementById('file-info');
+    const fileUploadText = document.getElementById('file-upload-text');
+    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+
+    if (file) {
+        // Check file size
+        if (file.size > maxSize) {
+            fileInfo.innerHTML = '<span style="color: #dc2c2c;">File size exceeds 5MB limit</span>';
+            event.target.value = ''; // Clear the file input
+            fileUploadText.textContent = 'Choose File';
+            return;
+        }
+
+        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+        if (!validTypes.includes(file.type)) {
+            fileInfo.innerHTML = '<span style="color: #dc2c2c;">Invalid file type. Please upload JPG, PNG, or PDF</span>';
+            event.target.value = ''; // Clear the file input
+            fileUploadText.textContent = 'Choose File';
+            return;
+        }
+
+        const fileSize = (file.size / 1024).toFixed(2);
+        fileUploadText.textContent = file.name;
+        fileInfo.innerHTML = `<span style="color: #2c72dc;">✓ ${file.name} (${fileSize} KB)</span>`;
+    } else {
+        fileUploadText.textContent = 'Choose File';
+        fileInfo.innerHTML = '';
     }
 }

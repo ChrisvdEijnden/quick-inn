@@ -8,9 +8,9 @@
 <div class="profile-wrapper">
     <h1>Account information</h1>
     
-    <form method="POST" action="{% url 'profile' %}" class = "profile-form">
+    <form method="POST" action="{% url 'profile' %}" class="profile-form" enctype="multipart/form-data">
         {% csrf_token %}
-        
+
         <div class="form-group">
             <label for="first_name">FIRST NAME</label>
             <input type="text" id="first_name" name="first_name" value="{{ user.first_name|default:'' }}" required>
@@ -38,13 +38,13 @@
                     <option value="+39" {% if user.country_code == "+39" %}selected{% endif %}>+39</option>
                     <option value="+34" {% if user.country_code == "+34" %}selected{% endif %}>+34</option>
                 </select>
-                <input type="tel" class="phone-input" id="phone_number" name="phone_number" value="{% if user.phone_number %}{{ user.phone_number }}{% endif %}" placeholder="Phone number">            
+                <input type="tel" class="phone-input" id="phone_number" name="phone_number" value="{% if user.phone_number %}{{ user.phone_number }}{% endif %}" placeholder="Phone number">
             </div>
         </div>
 
         <div class="form-group">
             <label for="date_of_birth">DATE OF BIRTH</label>
-            <input type="date" id="date_of_birth" name="date_of_birth" value="{% if user.date_of_birth %}{{ user.date_of_birth|date:'Y-m-d' }}{% endif %}">        
+            <input type="date" id="date_of_birth" name="date_of_birth" value="{% if user.date_of_birth %}{{ user.date_of_birth|date:'Y-m-d' }}{% endif %}">
         </div>
 
         <div class="form-group">
@@ -85,6 +85,22 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <label for="passport">PASSPORT PHOTO</label>
+            <div class="file-upload-wrapper">
+                <input type="file" id="passport" name="passport" accept="image/jpeg,image/jpg,image/png,application/pdf" onchange="handleFileSelect(event)" autocomplete="off">
+                <div class="file-upload-label" onclick="document.getElementById('passport').click()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <span id="file-upload-text">{% if user.passport_file %}{{ user.passport_file.name }}{% else %}Choose File{% endif %}</span>
+                </div>
+            </div>
+            <p class="file-help-text">Accepted formats: JPG, PNG, PDF (Max 5MB). Your document is encrypted and securely stored.</p>
+        </div>
+
         <button type="submit" class="save-btn">SAVE</button>
     </form>
 
@@ -115,6 +131,7 @@
         {% csrf_token %}
     </form>
 </div>
+
 {% endblock %}
 
 {% block extra_js %}
