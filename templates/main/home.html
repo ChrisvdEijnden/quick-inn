@@ -73,31 +73,39 @@
         </p>
         <div class="hiw-gallery" id="gallery">
             <div class="hiw-item">
-                <img src="{% static '/main/icons/creditcard@10x.png' %}">
-                <h3>Book</h3>
-                <p>Choose what you need, pick a time that works for you, and book in just a few clicks.</p>
+                <img src="{% static '/main/icons/creditcard@10x.png' %}" alt="creditcard icon">
+                <h3>Book a stay</h3>
+                <p>Choose the stay you want, pick a time that suits you, and complete your booking.</p>
             </div>
 
             <div class="hiw-item">
-                <img src="{% static '/main/icons/plus.app@10x.png' %}">
-                <h3>Create</h3>
-                <p>Create a quick request with your details so the right person knows exactly what to expect.</p>
+                <img src="{% static '/main/icons/plus.app@10x.png' %}" alt="plus icon">
+                <h3>Create a QR code</h3>
+                <p>Enter your details and instantly generate a personal QR code for your reservation.</p>
             </div>
 
             <div class="hiw-item">
-                <img src="{% static '/main/icons/qrcode.viewfinder@10x.png' %}">
-                <h3>Scan</h3>
-                <p>Scan the QR code on arrival to securely check in and confirm the start of the job.</p>
+                <img src="{% static '/main/icons/qrcode.viewfinder@10x.png' %}" alt="qrcode icon">
+                <h3>Scan at check-in</h3>
+                <p>Scan your QR code upon arrival for a fast, secure check‑in and immediate confirmation.</p>
             </div>
 
             <div class="hiw-item">
-                <img src="{% static '/main/icons/suitcase.rolling.and.suitcase@10x.png' %}">
-                <h3>Enjoy</h3>
-                <p>Sit back and relax while everything gets taken care of — simple and stress-free.</p>
+                <img src="{% static '/main/icons/suitcase.rolling.and.suitcase@10x.png'%}" alt="suitcase icon">
+                <h3>Enjoy your stay</h3>
+                <p>Relax and enjoy a seamless, worry‑free stay.</p>
             </div>                  <!-- Enjoy -->
         </div>
 
         <button class="gallery-button">Create a QR-Code</button>
+        <div class="chevron-buttons">
+            <button id="chevron-btn-left">
+                <img src="{% static '/main/icons/chevron.left@4x.png' %}" class="chevron-icon" alt="chevron left">
+            </button>
+            <button id="chevron-btn-right">
+                <img src="{% static '/main/icons/chevron.right@4x.png' %}" class="chevron-icon" alt="chevron right">
+            </button>
+        </div>
     </section>
 </div>
 
