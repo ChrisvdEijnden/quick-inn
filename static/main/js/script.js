@@ -17,12 +17,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ---- Smooth Scroll on Button Click ----
-    const buttons = Array.from(document.querySelectorAll('.parallax-content button, .gallery-button'));
+    const buttons = Array.from(
+        document.querySelectorAll('.parallax-content button, .gallery-button')
+    ).filter(Boolean);
+
     buttons.forEach((btn, index) => {
+        if (!btn) return;
+
         btn.addEventListener('click', () => {
             const nextButton = buttons[index + 1];
 
-            if (nextButton) {
+            if (nextButton && nextButton.getBoundingClientRect) {
                 const offset = 450;
                 const elementPosition = nextButton.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - offset;
@@ -95,7 +100,7 @@ if (gallery) {
     }
 }
 
-// ---- Passport handling"
+// ---- Passport handling ----
 function handleFileSelect(event) {
     const file = event.target.files[0];
     const fileInfo = document.getElementById('file-info');
