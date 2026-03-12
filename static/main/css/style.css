@@ -1,3 +1,7 @@
+/* ============================================================================
+   BASE STYLES & RESET
+   ============================================================================ */
+
 * {
     margin: 0;
     padding: 0;
@@ -21,7 +25,11 @@ p {
     font-family: 'SF Pro Text', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* Navbar Styles */
+
+/* ============================================================================
+   NAVIGATION
+   ============================================================================ */
+
 .navbar {
     background-color: #000;
     padding: 0.6rem 1.8rem;
@@ -42,7 +50,9 @@ p {
     align-items: center;
 }
 
-.nav-btn, .plus-btn, .logout-btn {
+.nav-btn,
+.plus-btn,
+.logout-btn {
     padding: 7px 12px;
     background-color: transparent;
     border: 2px solid transparent;
@@ -54,6 +64,25 @@ p {
     display: inline-block;
 }
 
+.profile-btn,
+.plus-btn,
+.chevron-buttons button {
+    height: 40px;
+    width: 40px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-icon,
+.plus-icon,
+.chevron-icon {
+    height: 26px;
+    width: 26px;
+    object-fit: contain;
+}
+
 .plus-btn {
     position: sticky;
     top: 20px;
@@ -63,36 +92,25 @@ p {
     z-index: 10;
 }
 
+.login-btn,
+.logout-btn {
+    background-color: #2c72dc;
+    border: 2px solid #2c72dc;
+}
+
 .nav-btn:hover {
     background-color: #333;
     border-color: #333;
 }
 
-.login-btn, .logout-btn {
-    background-color: #2c72dc;
-    border: 2px solid #2c72dc;
+.login-btn:hover,
+.logout-btn:hover {
+    background-color: #2a6fd4;
+    border-color: #2a6fd4;
 }
 
-.profile-btn, .plus-btn, .chevron-buttons button {
-    height: 40px;
-    width: 40px;
+.logout-btn {
     margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.profile-icon, .plus-icon, .chevron-icon {
-    height: 26px;
-    width: 26px;
-    object-fit: contain;
-}
-
-.chevron-buttons button {
-    display: flex;
-    flex-direction: row;
-    border-radius: 50px;
-    border-color: transparent;
 }
 
 .chevron-buttons {
@@ -104,20 +122,18 @@ p {
     margin-top: 1rem;
 }
 
-.login-btn:hover,
-.logout-btn:hover,
-.gallery-button:hover,
-.parallax-content button:hover,
-.get-started-btn:hover {
-    background-color: #2a6fd4;
-    border-color: #2a6fd4;
+.chevron-buttons button {
+    display: flex;
+    flex-direction: row;
+    border-radius: 50px;
+    border-color: transparent;
 }
 
-.logout-btn {
-    margin: 0;
-}
 
-/* Parallax Styles */
+/* ============================================================================
+   HOMEPAGE - PARALLAX
+   ============================================================================ */
+
 .parallax-container {
     height: 100vh;
     position: relative;
@@ -180,6 +196,13 @@ p {
     align-self: center;
 }
 
+.parallax-content button:hover,
+.get-started-btn:hover,
+.gallery-button:hover {
+    background-color: #2a6fd4;
+    border-color: #2a6fd4;
+}
+
 .gallery-button {
     margin: 0;
     z-index: 10;
@@ -188,34 +211,34 @@ p {
     margin-top: 1rem;
 }
 
-/* Content & Info Section */
+
+/* ============================================================================
+   HOMEPAGE - CONTENT SECTIONS
+   ============================================================================ */
+
 .content {
     padding: 2rem 0.5rem;
     align-items: center;
     overflow-x: hidden;
 }
 
-.hiw-buttons {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    width: 100%;
-}
-
-.info-section, .hiw-section {
+.info-section,
+.hiw-section {
     margin: 0 auto;
     padding: 0.5rem 0;
     text-align: center;
     overflow-x: hidden;
 }
 
-.info-section h2, .hiw-section h2 {
+.info-section h2,
+.hiw-section h2 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
     color: #333;
 }
 
-.info-section p, .hiw-section p {
+.info-section p,
+.hiw-section p {
     margin: 0 auto;
     font-size: 1.1rem;
     line-height: 1.8;
@@ -224,7 +247,15 @@ p {
     max-width: 800px;
 }
 
-/* Image Gallery */
+.hiw-section {
+    padding-bottom: 4rem;
+}
+
+
+/* ============================================================================
+   HOMEPAGE - IMAGE GALLERY
+   ============================================================================ */
+
 .image-gallery {
     margin: 0;
     display: grid;
@@ -244,7 +275,18 @@ p {
     display: block;
 }
 
-/* HIW Gallery */
+
+/* ============================================================================
+   HOMEPAGE - HOW IT WORKS GALLERY
+   ============================================================================ */
+
+.hiw-buttons {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    width: 100%;
+}
+
 .hiw-gallery {
     display: flex;
     gap: 20px;
@@ -258,10 +300,6 @@ p {
 
 .hiw-gallery::-webkit-scrollbar {
     display: none;
-}
-
-.hiw-section {
-    padding-bottom: 4rem;
 }
 
 .hiw-item {
@@ -313,28 +351,11 @@ p {
     text-align: left;
 }
 
-@media (max-width: 768px) {
-    .hiw-item {
-        width: 320px;
-        min-height: 300px;
-        padding: 2rem 1.5rem;
-    }
 
-    .hiw-gallery-sticky {
-        padding: 0 1rem;
-    }
+/* ============================================================================
+   LOGIN & SIGNUP PAGES
+   ============================================================================ */
 
-    .hiw-item img {
-        height: 48px;
-        width: 48px;
-    }
-
-    .hiw-item h3 {
-        font-size: 1.5rem;
-    }
-}
-
-/* Login Page Styles */
 .login-container {
     min-height: calc(100vh - 55px);
     display: flex;
@@ -412,34 +433,14 @@ p {
     text-decoration: underline;
 }
 
-@media (max-width: 768px) {
-    .login-box {
-        padding: 2rem;
-    }
 
-    .image-gallery {
-        grid-template-columns: 1fr;
-    }
-}
+/* ============================================================================
+   TICKETS PAGE
+   ============================================================================ */
 
-/* Tickets Page Styles */
 .tickets-container {
     position: relative;
-}
-
-.plus-btn {
-    position: fixed;
-    top: 80px;
-    right: 20px;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.plus-icon {
-    width: 40px;
-    height: 40px;
+    background-color: #f5f5f5;
 }
 
 .tickets-grid {
@@ -448,62 +449,155 @@ p {
     position: relative;
 }
 
+/* Shared styles for tickets and create button */
+.create-ticket-div,
 .ticket {
+    margin: 1rem;
+    border-radius: 24px;
+    background-color: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 3rem 2.5rem;
+    aspect-ratio: 3 / 4;
     display: flex;
     align-items: center;
     justify-content: center;
-    aspect-ratio: 3 / 4;
     cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.ticket:nth-child(odd) {
-    background-color: red;
+.create-ticket-div:hover,
+.ticket:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
 }
 
-.ticket:nth-child(even) {
-    background-color: yellow;
+/* Create ticket button */
+.create-ticket-div {
+    text-decoration: none;
+    border: 2px dashed #0020a1;
+    background-color: white;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
-@media (min-width: 900px) {
-    .tickets-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-/* Profile Page Styles */
-.profile-container {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-.profile-name, .profile-wrapper h1 {
-    font-size: 1.5rem;
-    font-weight: 400;
+.create-ticket-div h2 {
     margin: 0;
-    color: #000;
+    color: #0020a1;
+    font-size: 1.2rem;
+    font-weight: 500;
 }
 
-.profile-email {
+.create-ticket-div .plus-icon {
+    width: 64px;
+    height: 64px;
+}
+
+/* Individual ticket cards */
+.ticket {
+    border: 2px solid rgba(0, 32, 161, 1);
+    background-color: #ccc;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 0;
+}
+
+.ticket-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0 0 22px 22px;
+}
+
+.ticket-content h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    color: #0020a1;
+    font-weight: 600;
+}
+
+.ticket-dates {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.ticket-date {
+    margin: 0;
     font-size: 0.9rem;
     color: #666;
-    margin: 0;
 }
 
-/* Profile Form Styles */
-.profile-wrapper {
-    max-width: 800px;
-    margin: 0 auto;
+
+/* ============================================================================
+   CREATE TICKET MODAL
+   ============================================================================ */
+
+.create-ticket-modal {
+    display: none;
+    position: fixed;
+    z-index: 100000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
     background-color: white;
-    padding: 40px;
+    margin: auto;
+    padding: 2.5rem;
+    border-radius: 24px;
+    max-width: 900px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
-.profile-wrapper h1 {
-    font-size: 1.5rem;
-    font-weight: 400;
+.modal-content h2 {
+    margin: 0 0 2rem 0;
+    font-size: 2rem;
     color: #000;
-    margin: 0 0 0.5rem;
+    font-weight: 600;
 }
 
-.profile-wrapper label, .form-group label {
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 20px;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+}
+
+
+/* ============================================================================
+   FORMS - SHARED STYLES
+   ============================================================================ */
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.ticket-form label,
+.profile-wrapper label,
+.form-group label {
     display: block;
     font-size: 11px;
     text-transform: uppercase;
@@ -513,6 +607,8 @@ p {
     font-weight: 500;
 }
 
+.ticket-form input[type="text"],
+.ticket-form input[type="date"],
 .profile-wrapper input[type="text"],
 .profile-wrapper input[type="email"],
 .profile-wrapper input[type="tel"],
@@ -531,22 +627,15 @@ p {
     font-family: inherit;
 }
 
-.profile-wrapper input[type="text"]:hover,
-.profile-wrapper input[type="email"]:hover,
-.profile-wrapper input[type="tel"]:hover,
-.profile-wrapper input[type="date"]:hover,
-.profile-wrapper input[type="password"]:hover,
+.ticket-form input:hover,
+.profile-wrapper input:hover,
 .profile-wrapper select:hover,
 .form-group input:hover {
-    outline: none;
     border-color: #000;
 }
 
-.profile-wrapper input[type="text"]:focus,
-.profile-wrapper input[type="email"]:focus,
-.profile-wrapper input[type="tel"]:focus,
-.profile-wrapper input[type="date"]:focus,
-.profile-wrapper input[type="password"]:focus,
+.ticket-form input:focus,
+.profile-wrapper input:focus,
 .profile-wrapper select:focus,
 .form-group input:focus {
     background-color: #eaf0fd;
@@ -554,8 +643,97 @@ p {
     border-color: #000;
 }
 
-.form-group {
-    margin-bottom: 1.5rem;
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+
+/* ============================================================================
+   MODAL BUTTONS
+   ============================================================================ */
+
+.modal-buttons {
+    margin-top: 2rem;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.modal-btn {
+    height: 55px;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border-radius: 50px;
+    box-sizing: border-box;
+    border: 2px solid #000;
+    font-family: inherit;
+    font-weight: 350;
+    transition: all 0.2s ease;
+}
+
+.create-btn {
+    background-color: #000;
+    color: #fff;
+}
+
+.create-btn:hover {
+    background-color: #002197;
+    border-color: #002197;
+}
+
+.cancel-btn {
+    background-color: #fff;
+    color: #000;
+}
+
+.cancel-btn:hover {
+    background-color: #f5f5f5;
+    border-color: #002197;
+    color: #002197;
+}
+
+
+/* ============================================================================
+   PROFILE PAGE
+   ============================================================================ */
+
+.profile-container {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.profile-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 40px;
+}
+
+.profile-name,
+.profile-wrapper h1 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin: 0;
+    color: #000;
+}
+
+.profile-wrapper h1 {
+    margin: 0 0 0.5rem;
+}
+
+.profile-email {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
 }
 
 .phone-wrapper {
@@ -599,6 +777,27 @@ p {
     width: 100px;
     flex-shrink: 0;
 }
+
+.profile-wrapper .phone-wrapper input[type="tel"] {
+    flex: 1;
+    min-width: 0;
+    padding: 16px;
+    font-size: 0.95rem;
+    border: none;
+    background-color: #f5f5f5;
+    color: #1a1a1a;
+    font-family: inherit;
+}
+
+.profile-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+
+/* ============================================================================
+   FILE UPLOAD
+   ============================================================================ */
 
 .file-upload-wrapper {
     position: relative;
@@ -663,6 +862,11 @@ p {
     color: #999;
 }
 
+
+/* ============================================================================
+   BUTTONS - PRIMARY ACTIONS
+   ============================================================================ */
+
 .save-btn,
 .logout-btn,
 .login-submit-btn,
@@ -682,12 +886,14 @@ p {
     font-weight: 350;
 }
 
-.save-btn, .login-submit-btn {
+.save-btn,
+.login-submit-btn {
     background-color: #000;
     color: #fff;
 }
 
-.login-submit-btn, .google-login-btn {
+.login-submit-btn,
+.google-login-btn {
     width: 100%;
 }
 
@@ -696,7 +902,8 @@ p {
     gap: 12px;
 }
 
-.logout-btn, .google-login-btn {
+.logout-btn,
+.google-login-btn {
     background-color: #fff;
     color: #000;
 }
@@ -756,23 +963,11 @@ p {
     margin-top: 0;
 }
 
-.profile-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
-    cursor: pointer;
-    opacity: 0.6;
-}
 
-.profile-wrapper .phone-wrapper input[type="tel"] {
-    flex: 1;
-    min-width: 0;
-    padding: 16px;
-    font-size: 0.95rem;
-    border: none;
-    background-color: #f5f5f5;
-    color: #1a1a1a;
-    font-family: inherit;
-}
+/* ============================================================================
+   COOKIE BANNER
+   ============================================================================ */
 
-/* Cookie Banner Styles */
 .cookie-banner {
     position: fixed;
     bottom: 30px;
@@ -848,17 +1043,17 @@ p {
     color: white;
 }
 
-.decline-btn:hover {
-    background-color: #fff;
-    color: #000;
-}
-
+.decline-btn:hover,
 .customize-btn:hover {
     background-color: #fff;
     color: #000;
 }
 
-/* Cookie Modal Styles */
+
+/* ============================================================================
+   COOKIE MODAL
+   ============================================================================ */
+
 .cookie-modal {
     display: none;
     position: fixed;
@@ -875,15 +1070,6 @@ p {
     animation: fadeIn 0.2s ease;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
 .cookie-modal-content {
     background-color: #000;
     padding: 40px;
@@ -895,17 +1081,6 @@ p {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.15);
     animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp {
-    from {
-        transform: translateY(30px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
 }
 
 .cookie-modal-content > p {
@@ -1012,7 +1187,6 @@ p {
     color: #000;
 }
 
-/* Custom Scrollbar for Modal */
 .cookie-modal-content::-webkit-scrollbar {
     width: 8px;
 }
@@ -1031,8 +1205,102 @@ p {
     background: rgba(255, 255, 255, 0.3);
 }
 
-/* Responsive Design */
-@media (max-width: 640px) {
+
+/* ============================================================================
+   FOOTER
+   ============================================================================ */
+
+.footer {
+    background-color: #000;
+    color: #fff;
+    padding: 2rem;
+    text-align: center;
+}
+
+.footer-content p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+/* ============================================================================
+   RESPONSIVE - MOBILE
+   ============================================================================ */
+
+@media (max-width: 768px) {
+    /* Homepage */
+    .hiw-item {
+        width: 320px;
+        min-height: 300px;
+        padding: 2rem 1.5rem;
+    }
+
+    .hiw-gallery-sticky {
+        padding: 0 1rem;
+    }
+
+    .hiw-item img {
+        height: 48px;
+        width: 48px;
+    }
+
+    .hiw-item h3 {
+        font-size: 1.5rem;
+    }
+
+    /* Login */
+    .login-box {
+        padding: 2rem;
+    }
+
+    .image-gallery {
+        grid-template-columns: 1fr;
+    }
+
+    /* Modals */
+    .modal-content {
+        padding: 2rem 1.5rem;
+        width: 95%;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+    }
+
+    .modal-btn {
+        width: 100%;
+    }
+
+    /* Cookie Modal */
     .cookie-modal-content {
         padding: 30px 24px;
         border-radius: 20px;
@@ -1051,15 +1319,17 @@ p {
     }
 }
 
-/* Footer */
-.footer {
-    background-color: #000;
-    color: #fff;
-    padding: 2rem;
-    text-align: center;
-}
 
-.footer-content p {
-    margin: 0;
-    font-size: 0.9rem;
+/* ============================================================================
+   RESPONSIVE - DESKTOP
+   ============================================================================ */
+
+@media (min-width: 900px) {
+    .tickets-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .ticket-content {
+        padding: 1rem;
+    }
 }

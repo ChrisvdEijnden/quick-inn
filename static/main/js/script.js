@@ -132,3 +132,45 @@ function handleFileSelect(event) {
         fileInfo.innerHTML = '';
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    let modal = document.getElementById("create-ticket-modal");
+    let btn = document.getElementById("openTicketModal");
+    let closeBtn = document.getElementsByClassName("close")[0];
+    let cancelBtn = document.getElementById("cancelBtn");
+
+    // Open modal
+    btn.onclick = function(e) {
+        e.preventDefault();
+        modal.style.display = "flex";
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Close modal with X button
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close modal with Cancel button
+    cancelBtn.onclick = function() {
+        modal.style.display = "none";
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+});

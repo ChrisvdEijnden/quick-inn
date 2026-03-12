@@ -10,16 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 from decouple import config
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
+# ==============================================================================
+# CORE SETTINGS
+# ==============================================================================
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
@@ -27,10 +28,16 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lambda v: [s.strip() for s in v.split(',')])
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='localhost,127.0.0.1',
+    cast=lambda v: [s.strip() for s in v.split(',')]
+)
 
 
-# Application definition
+# ==============================================================================
+# APPLICATION DEFINITION
+# ==============================================================================
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -39,7 +46,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Third-party apps
     'social_django',
+    # Local apps
     'quickinn',
 ]
 
@@ -75,8 +84,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'quickinn.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
+# ==============================================================================
+# DATABASE
+# ==============================================================================
 
 DATABASES = {
     'default': {
@@ -86,8 +96,9 @@ DATABASES = {
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
+# ==============================================================================
+# PASSWORD VALIDATION
+# ==============================================================================
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -105,25 +116,31 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/6.0/topics/i18n/
+# ==============================================================================
+# INTERNATIONALIZATION
+# ==============================================================================
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
+# ==============================================================================
+# STATIC FILES (CSS, JavaScript, Images)
+# ==============================================================================
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
+STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+
+# ==============================================================================
+# AUTHENTICATION
+# ==============================================================================
+
+# Custom User Model
+AUTH_USER_MODEL = 'quickinn.CustomUser'
 
 # Authentication backends
 AUTHENTICATION_BACKENDS = [
@@ -131,15 +148,20 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+# Redirect URLs
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'profile'
+LOGOUT_REDIRECT_URL = 'home'
+
+
+# ==============================================================================
+# THIRD-PARTY API KEYS
+# ==============================================================================
+
 # Google OAuth Settings
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY', default='')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET', default='')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', 'profile']
 
-# Redirect URLs
-LOGIN_URL = 'login'
-LOGOUT_REDIRECT_URL = 'home'
-LOGIN_REDIRECT_URL = 'profile'
-
-# Custom User Model
-AUTH_USER_MODEL = 'quickinn.CustomUser'
+# Unsplash API
+UNSPLASH_ACCESS_KEY = config('ACCESS_KEY_UNSPLASH', default='')
