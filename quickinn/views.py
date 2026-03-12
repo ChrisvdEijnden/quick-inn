@@ -16,8 +16,8 @@ def home(request):
     return render(request, 'main/home.html')
 
 
-def get_hotel_image(hotel_name, city):
-    """Fetch hotel image from Unsplash API"""
+def get_hotel_image(hotel_name, city, country=None):
+    """Fetch hotel image from Unsplash API with multiple fallback options"""
     try:
         access_key = settings.UNSPLASH_ACCESS_KEY
 
@@ -25,23 +25,40 @@ def get_hotel_image(hotel_name, city):
             return None
 
         url = 'https://api.unsplash.com/search/photos'
-        params = {
-            'query': f'{hotel_name}, {city}',
-            'per_page': 1,
-            'orientation': 'portrait'
-        }
         headers = {
             'Authorization': f'Client-ID {access_key}'
         }
 
-        response = requests.get(url, params=params, headers=headers)
+        # List of query attempts in order of preference
+        queries = [
+            f'{hotel_name}, {city}',  # Most specific
+            hotel_name,  # Hotel only
+            city,  # City only
+        ]
 
-        if response.status_code == 200:
-            data = response.json()
-            if data['results']:
-                return data['results'][0]['urls']['regular']
+        # Add country if provided
+        if country:
+            queries.append(country)
 
+        # Try each query until we get results
+        for query in queries:
+            params = {
+                'query': query,
+                'per_page': 1,
+                'orientation': 'portrait'
+            }
+            response = requests.get(url, params=params, headers=headers)
+
+            if response.status_code == 200:
+                data = response.json()
+                if data['results']:
+                    print(f"Found image using query: {query}")  # Debug info
+                    return data['results'][0]['urls']['regular']
+
+        # No results found after all attempts
+        print(f"No images found for {hotel_name}, {city}")
         return None
+
     except Exception as e:
         print(f"Error fetching image for {hotel_name}: {e}")
         return None
@@ -69,6 +86,7 @@ def tickets(request):
             'id': 1,
             'title': 'Burj Al Arab',
             'city': 'Dubai',
+            'country': 'United Arabic Emirates',
             'checkin': '2026-03-15',
             'checkout': '2026-03-17',
         },
@@ -76,6 +94,7 @@ def tickets(request):
             'id': 2,
             'title': 'Marina Bay Sands',
             'city': 'Singapore',
+            'country': 'Singapore',
             'checkin': '2026-07-05',
             'checkout': '2026-07-09',
         },
@@ -83,6 +102,7 @@ def tickets(request):
             'id': 3,
             'title': 'The Ritz Paris',
             'city': 'Paris',
+            'country': 'France',
             'checkin': '2026-04-10',
             'checkout': '2026-04-13',
         },
@@ -90,6 +110,7 @@ def tickets(request):
             'id': 4,
             'title': 'Icehotel',
             'city': 'Jukkasjärvi',
+            'country': 'Sweden',
             'checkin': '2026-09-22',
             'checkout': '2026-09-24',
         },
@@ -97,6 +118,7 @@ def tickets(request):
             'id': 5,
             'title': 'The Plaza Hotel',
             'city': 'New York',
+            'country': 'United States',
             'checkin': '2026-11-25',
             'checkout': '2026-11-27',
         },
