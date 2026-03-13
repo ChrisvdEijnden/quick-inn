@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3a130717-446a-424d-a4c0-a88acb1c613f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/quickinn/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/quickinn/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/main/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/main/css/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,7 +144,8 @@
       <workItem from="1772394405994" duration="898000" />
       <workItem from="1772444144207" duration="702000" />
       <workItem from="1773220774516" duration="10506000" />
-      <workItem from="1773316952773" duration="7525000" />
+      <workItem from="1773316952773" duration="7656000" />
+      <workItem from="1773425415175" duration="638000" />
     </task>
     <servers />
   </component>
