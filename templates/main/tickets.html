@@ -6,27 +6,65 @@
 {% block content %}
 <div class="tickets-container">
     <div class="tickets-grid">
-        <a href="#" class="create-ticket-div" id="openTicketModal">
+        <a href="#" class="create-ticket-div" id="createTicketModal">
             <img src="{% static 'main/icons/plus.app.svg' %}" alt="Plus" class="plus-icon">
             <h2>Create new ticket</h2>
         </a>
 
         <!-- Existing Tickets -->
         {% for ticket in tickets %}
-            <div class="ticket" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('{{ ticket.image_url }}'); background-size: cover; background-position: center;">
-                <div class="ticket-content">
-                    <h3>{{ ticket.title }}</h3>
-                    <div class="ticket-dates">
-                        <p class="ticket-date">{{ ticket.checkin_formatted }} - {{ ticket.checkout_formatted }}</p>
-                    </div>
+        <a href="#"
+           class="ticket"
+           data-title="{{ ticket.title }}"
+           data-city="{{ ticket.city }}"
+           data-country="{{ ticket.country }}"
+           data-checkin="{{ ticket.checkin_formatted }}"
+           data-checkout="{{ ticket.checkout_formatted }}"
+           {% if ticket.qr_code %}data-qr="{{ ticket.qr_code }}"{% endif %}
+           data-image="{{ ticket.image_url }}"
+           style="background-image: linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.1)), url('{{ ticket.image_url }}'); background-size: cover; background-position: center;">
+
+            <div class="ticket-content">
+                <h3>{{ ticket.title }}</h3>
+                <div class="ticket-dates">
+                    <p class="ticket-date">{{ ticket.checkin_formatted }} - {{ ticket.checkout_formatted }}</p>
                 </div>
             </div>
+        </a>
         {% endfor %}
     </div>
 </div>
 
+<!-- Single Ticket Details Modal -->
+<div class="ticket-modal" id="ticket-modal">
+    <div class="modal-content ticket-modal-content">
+        <span class="close">&times;</span>
+
+        <div class="ticket-modal-header">
+            <h2 id="modal-ticket-title"></h2>
+            <p class="modal-ticket-location" id="modal-ticket-location"></p>
+            <div class="ticket-dates">
+                <p class="ticket-date" id="modal-ticket-dates"></p>
+            </div>
+        </div>
+
+        <div class="ticket-modal-body">
+            <!-- QR Code -->
+            <div class="ticket-modal-qr">
+                <img id="modal-qr-code" src="" alt="Booking QR Code">
+                <p class="qr-label">Scan for booking details</p>
+            </div>
+
+            <!-- Google Map -->
+            <div class="ticket-modal-map">
+                <div id="modal-map"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Ticket Modal -->
 <div class="create-ticket-modal" id="create-ticket-modal">
-    <!-- Modal content -->
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Create New Ticket</h2>
@@ -66,5 +104,90 @@
 {% endblock %}
 
 {% block extra_js %}
+<!-- Google Maps API - Load first -->
+<script>
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.googleapis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+        key: "{{ google_maps_api_key }}",
+        v: "weekly",
+    });
+</script>
+
+<!-- Your custom script -->
 <script src="{% static 'main/js/script.js' %}"></script>
+
+<!-- Initialize Google Maps -->
+<script>
+async function initMap() {
+    const { Map } = await google.maps.importLibrary("maps");
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+    const mapElement = document.getElementById('modal-map');
+    if (!mapElement) {
+        console.log('Map element not found');
+        return;
+    }
+
+    const defaultCenter = { lat: 25.276987, lng: 55.296249 };
+
+    window.map = new Map(mapElement, {
+        center: defaultCenter,
+        zoom: 15,
+        mapId: 'DEMO_MAP_ID',
+        disableDefaultUI: false,
+        zoomControl: true,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: true
+    });
+
+    window.marker = new AdvancedMarkerElement({
+        map: window.map,
+    });
+
+    window.geocoder = new google.maps.Geocoder();
+
+    console.log('✓ Google Maps initialized');
+}
+
+// Geocoding function
+async function geocodeHotel(hotelName, city, country) {
+    if (!window.geocoder || !window.map || !window.marker) {
+        console.warn('Map not initialized');
+        return;
+    }
+
+    const address = `${hotelName}, ${city}, ${country}`;
+
+    window.geocoder.geocode({ address: address }, function(results, status) {
+        if (status === 'OK' && results && results[0]) {
+            const location = results[0].geometry.location;
+            window.map.setCenter(location);
+            window.map.setZoom(15);
+            window.marker.position = location;
+            console.log(`✓ Geocoded: ${hotelName}`);
+        } else {
+            console.log('Trying fallback geocoding...');
+            window.geocoder.geocode({ address: `${city}, ${country}` }, function(results, status) {
+                if (status === 'OK' && results && results[0]) {
+                    const location = results[0].geometry.location;
+                    window.map.setCenter(location);
+                    window.map.setZoom(12);
+                    window.marker.position = location;
+                    console.log(`✓ Geocoded: ${city}, ${country}`);
+                }
+            });
+        }
+    });
+}
+
+// Make geocodeHotel available globally
+window.geocodeHotel = geocodeHotel;
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMap);
+} else {
+    initMap();
+}
+</script>
 {% endblock %}

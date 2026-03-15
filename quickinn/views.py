@@ -6,6 +6,9 @@ from django.contrib import messages
 from django.conf import settings
 from datetime import datetime, date
 import requests
+import qrcode
+from io import BytesIO
+import base64
 
 User = get_user_model()
 
@@ -14,6 +17,40 @@ def home(request):
     if request.user.is_authenticated:
         return redirect('tickets')
     return render(request, 'main/home.html')
+
+
+def generate_qr_code(data):
+    """Generate a QR code and return it as a base64 encoded image"""
+    try:
+        # Create QR code instance
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_H,
+            box_size=10,
+            border=4,
+        )
+
+        # Add data
+        qr.add_data(data)
+        qr.make(fit=True)
+
+        # Create image
+        img = qr.make_image(fill_color="black", back_color="white")
+
+        # Save to bytes
+        buffered = BytesIO()
+        img.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue()).decode()
+
+        result = f"data:image/png;base64,{img_str}"
+        print(f"✓ QR code generated successfully")
+        return result
+
+    except Exception as e:
+        print(f"ERROR generating QR code: {e}")
+        import traceback
+        traceback.print_exc()
+        return ""
 
 
 def get_hotel_image(hotel_name, city, country=None):
@@ -52,10 +89,9 @@ def get_hotel_image(hotel_name, city, country=None):
             if response.status_code == 200:
                 data = response.json()
                 if data['results']:
-                    print(f"Found image using query: {query}")  # Debug info
+                    print(f"Found image using query: {query}")
                     return data['results'][0]['urls']['regular']
 
-        # No results found after all attempts
         print(f"No images found for {hotel_name}, {city}")
         return None
 
@@ -72,8 +108,6 @@ def tickets(request):
         checkout = request.POST.get('checkout', '').strip()
 
         if hotel_name and checkin and checkout:
-            # Here you would save to database
-            # For now, just add a success message
             messages.success(request, f'Ticket for {hotel_name} created successfully!')
         else:
             messages.error(request, 'Please fill in all fields.')
@@ -86,7 +120,7 @@ def tickets(request):
             'id': 1,
             'title': 'Burj Al Arab',
             'city': 'Dubai',
-            'country': 'United Arabic Emirates',
+            'country': 'United Arab Emirates',
             'checkin': '2026-03-15',
             'checkout': '2026-03-17',
         },
@@ -143,12 +177,18 @@ def tickets(request):
         # Fetch hotel image
         ticket['image_url'] = get_hotel_image(ticket['title'], ticket['city'])
 
+        # Generate QR code with ticket information
+        qr_data = f"Hotel: {ticket['title']}\nCity: {ticket['city']}, {ticket['country']}\nCheck-in: {ticket['checkin']}\nCheck-out: {ticket['checkout']}\nBooking ID: {ticket['id']}"
+        ticket['qr_code'] = generate_qr_code(qr_data)
+
     # Sort by check-in date (earliest first)
     tickets_list.sort(key=lambda x: x['checkin_date'])
 
     return render(request, 'main/tickets.html', {
-        "tickets": tickets_list
+        "tickets": tickets_list,
+        "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY,
     })
+
 
 @login_required
 def profile_view(request):
@@ -303,7 +343,6 @@ def signup_view(request):
             password=password
         )
 
-        # Log the user in
         login(request, user)
         messages.success(request, 'Account created successfully!')
         return redirect('home')

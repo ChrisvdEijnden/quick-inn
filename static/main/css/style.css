@@ -462,6 +462,7 @@ p {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    text-decoration: none;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
@@ -536,10 +537,11 @@ p {
 
 
 /* ============================================================================
-   CREATE TICKET MODAL
+   MODALS - BASE
    ============================================================================ */
 
-.create-ticket-modal {
+.create-ticket-modal,
+.ticket-modal {
     display: none;
     position: fixed;
     z-index: 100000;
@@ -562,6 +564,7 @@ p {
     max-width: 900px;
     width: 90%;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    position: relative;
 }
 
 .modal-content h2 {
@@ -573,7 +576,9 @@ p {
 
 .close {
     color: #aaaaaa;
-    float: right;
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
@@ -583,7 +588,94 @@ p {
 .close:hover,
 .close:focus {
     color: #000;
-    text-decoration: none;
+}
+
+
+/* ============================================================================
+   TICKET MODAL - SPECIFIC
+   ============================================================================ */
+
+.ticket-modal .modal-content {
+    max-width: 1000px;
+}
+
+.ticket-modal-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-right: 2rem;
+}
+
+.ticket-modal-header h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 0 0 0.75rem 0;
+    color: #000;
+}
+
+.modal-ticket-location {
+    color: #666;
+    font-size: 1rem;
+    margin: 0 0 1.5rem 0;
+    font-weight: 400;
+}
+
+.ticket-modal-header .ticket-dates {
+    margin: 0;
+}
+
+.ticket-modal-header .ticket-date {
+    font-size: 0.95rem;
+    color: #888;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Ticket Modal Body - Stacked on mobile, side-by-side on desktop */
+.ticket-modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* QR Code Container */
+.ticket-modal-qr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 16px;
+}
+
+.ticket-modal-qr img {
+    width: 100%;
+    height: auto;
+    border: 3px solid #fff;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.qr-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Google Map Container */
+.ticket-modal-map {
+    width: 100%;
+    height: 300px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid #e0e0e0;
+}
+
+#modal-map {
+    width: 100%;
+    height: 100%;
 }
 
 
@@ -1283,6 +1375,11 @@ p {
         grid-template-columns: 1fr;
     }
 
+    /* Tickets - 2 columns on mobile */
+    .tickets-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
     /* Modals */
     .modal-content {
         padding: 2rem 1.5rem;
@@ -1299,6 +1396,27 @@ p {
 
     .modal-btn {
         width: 100%;
+    }
+
+    /* Ticket Modal - Stacked layout */
+    .ticket-modal-header {
+        padding-right: 1.5rem;
+    }
+
+    .ticket-modal-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .ticket-modal-qr {
+        padding: 1.5rem;
+    }
+
+    .ticket-modal-qr img {
+        max-width: 200px;
+    }
+
+    .ticket-modal-map {
+        height: 250px;
     }
 
     /* Cookie Modal */
@@ -1325,12 +1443,44 @@ p {
    RESPONSIVE - DESKTOP
    ============================================================================ */
 
-@media (min-width: 900px) {
+/* 3 columns - tablets/small desktops */
+@media (min-width: 769px) {
+    .tickets-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Ticket Modal - Side by side layout */
+    .ticket-modal-body {
+        display: grid;
+        grid-template-columns: 350px 1fr;
+        gap: 2rem;
+    }
+
+    .ticket-modal-qr {
+        grid-column: 1;
+    }
+
+    .ticket-modal-map {
+        grid-column: 2;
+        height: 100%;
+        min-height: 400px;
+    }
+}
+
+/* 4 columns - medium desktops */
+@media (min-width: 1024px) {
     .tickets-grid {
         grid-template-columns: repeat(4, 1fr);
     }
 
     .ticket-content {
         padding: 1rem;
+    }
+}
+
+/* 5 columns - large desktops */
+@media (min-width: 1440px) {
+    .tickets-grid {
+        grid-template-columns: repeat(5, 1fr);
     }
 }

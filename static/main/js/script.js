@@ -1,22 +1,234 @@
-document.addEventListener('DOMContentLoaded', function() {
+// ============================================================================
+// TYPE DEFINITIONS (for IDE autocomplete)
+// ============================================================================
 
-    // ---- Parallax Scrolling Effect ----
-    const parallax = document.querySelector('.parallax-bg');
-    const parallaxContent = document.querySelector('.parallax-content');
+/**
+ * @typedef {Object} google
+ * @property {Object} maps
+ */
 
-    window.addEventListener('scroll', function() {
-        const scrollPosition = window.pageYOffset;
+/**
+ * @typedef {Object} google.maps.Map
+ * @typedef {Object} google.maps.Marker
+ * @typedef {Object} google.maps.Geocoder
+ */
 
-        if (parallax) {
-            parallax.style.transform = 'translateY(' + scrollPosition * 0.6 + 'px)';
-        }
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
 
-        if (parallaxContent) {
-            parallaxContent.style.transform = 'translate(-50%, -50%) translateY(' + scrollPosition * -0.8 + 'px)';
+function togglePassword(inputId, button) {
+    const input = document.getElementById(inputId);
+    if (!input || !button) return;
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        button.textContent = 'HIDE';
+    } else {
+        input.type = 'password';
+        button.textContent = 'SHOW';
+    }
+}
+
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+    const fileInfo = document.getElementById('file-info');
+    const fileUploadText = document.getElementById('file-upload-text');
+    const maxSize = 5 * 1024 * 1024; // 5MB
+
+    if (!file) {
+        fileUploadText.textContent = 'Choose File';
+        fileInfo.innerHTML = '';
+        return;
+    }
+
+    // Validate file size
+    if (file.size > maxSize) {
+        fileInfo.innerHTML = '<span style="color: #dc2c2c;">File size exceeds 5MB limit</span>';
+        event.target.value = '';
+        fileUploadText.textContent = 'Choose File';
+        return;
+    }
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+    if (!validTypes.includes(file.type)) {
+        fileInfo.innerHTML = '<span style="color: #dc2c2c;">Invalid file type. Please upload JPG, PNG, or PDF</span>';
+        event.target.value = '';
+        fileUploadText.textContent = 'Choose File';
+        return;
+    }
+
+    // File is valid
+    const fileSize = (file.size / 1024).toFixed(2);
+    fileUploadText.textContent = file.name;
+    fileInfo.innerHTML = `<span style="color: #2c72dc;">✓ ${file.name} (${fileSize} KB)</span>`;
+}
+
+// ============================================================================
+// MODAL HANDLERS
+// ============================================================================
+
+function initCreateTicketModal() {
+    const modal = document.getElementById("create-ticket-modal");
+    const btn = document.getElementById("createTicketModal");
+    const closeBtn = modal?.querySelector(".close");
+    const cancelBtn = document.getElementById("cancelBtn");
+
+    if (!modal || !btn) return;
+
+    const openModal = () => {
+        modal.style.display = "flex";
+        document.body.style.overflow = 'hidden';
+    };
+
+    const closeModal = () => {
+        modal.style.display = "none";
+        document.body.style.overflow = 'auto';
+    };
+
+    // Event listeners
+    btn.onclick = (e) => {
+        e.preventDefault();
+        openModal();
+    };
+
+    if (closeBtn) {
+        closeBtn.onclick = closeModal;
+    }
+
+    if (cancelBtn) {
+        cancelBtn.onclick = closeModal;
+    }
+
+    // Close on outside click
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            closeModal();
         }
     });
 
-    // ---- Smooth Scroll on Button Click ----
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+            closeModal();
+        }
+    });
+}
+
+function initTicketModal() {
+    const modal = document.getElementById("ticket-modal");
+
+    if (!modal) {
+        console.log('Ticket modal not found - skipping initialization');
+        return;
+    }
+
+    const closeBtn = modal.querySelector(".close");
+    const modalTitle = document.getElementById("modal-ticket-title");
+    const modalLocation = document.getElementById("modal-ticket-location");
+    const modalDates = document.getElementById("modal-ticket-dates");
+    const modalQR = document.getElementById("modal-qr-code");
+    const qrContainer = document.querySelector(".ticket-modal-qr");
+
+    const closeModal = () => {
+        modal.style.display = "none";
+        document.body.style.overflow = "auto";
+    };
+
+    // Attach click handlers to all ticket cards
+    document.querySelectorAll(".ticket").forEach((ticket) => {
+        ticket.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            // Extract ticket data
+            const title = ticket.getAttribute("data-title");
+            const city = ticket.getAttribute("data-city");
+            const country = ticket.getAttribute("data-country");
+            const checkin = ticket.getAttribute("data-checkin");
+            const checkout = ticket.getAttribute("data-checkout");
+            const qrCode = ticket.getAttribute("data-qr");
+
+            console.log('Opening ticket:', title);
+
+            // Populate modal content
+            if (modalTitle) modalTitle.textContent = title;
+            if (modalLocation) modalLocation.textContent = `${city}, ${country}`;
+            if (modalDates) modalDates.textContent = `${checkin} - ${checkout}`;
+
+            // Handle QR code
+            if (modalQR && qrContainer) {
+                if (qrCode && qrCode.startsWith('data:image/png;base64,')) {
+                    modalQR.src = qrCode;
+                    qrContainer.style.display = 'flex';
+                    console.log('✓ QR code loaded');
+                } else {
+                    qrContainer.style.display = 'none';
+                    console.log('✗ No QR code available');
+                }
+            }
+
+            // Show modal
+            modal.style.display = "flex";
+            document.body.style.overflow = "hidden";
+
+            // Update Google Map after modal is visible
+            setTimeout(() => {
+                if (typeof window.geocodeHotel === 'function' && window.map) {
+                    google.maps.event.trigger(window.map, 'resize');
+                    window.geocodeHotel(title, city, country);
+                    console.log('✓ Map updated for:', title);
+                } else {
+                    console.log('⏳ Waiting for Google Maps to load...');
+                }
+            }, 100);
+        });
+    });
+
+    // Close button handler
+    if (closeBtn) {
+        closeBtn.onclick = closeModal;
+    }
+
+    // Close on outside click
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+            closeModal();
+        }
+    });
+}
+
+// ============================================================================
+// HOMEPAGE EFFECTS
+// ============================================================================
+
+function initParallaxEffects() {
+    const parallax = document.querySelector('.parallax-bg');
+    const parallaxContent = document.querySelector('.parallax-content');
+
+    if (!parallax && !parallaxContent) return;
+
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.pageYOffset;
+
+        if (parallax) {
+            parallax.style.transform = `translateY(${scrollPosition * 0.6}px)`;
+        }
+
+        if (parallaxContent) {
+            parallaxContent.style.transform = `translate(-50%, -50%) translateY(${scrollPosition * -0.8}px)`;
+        }
+    });
+}
+
+function initSmoothScroll() {
     const buttons = Array.from(
         document.querySelectorAll('.parallax-content button, .gallery-button')
     ).filter(Boolean);
@@ -39,53 +251,32 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-
-    // ---- Logout Button Handler ----
-    const logoutBtn = document.querySelector('.profile-button-row .logout-btn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', function() {
-            const logoutForm = document.getElementById('logout-form');
-            if (logoutForm) {
-                logoutForm.submit();
-            }
-        });
-    }
-
-    const hiwItems = document.querySelectorAll(".hiw-item");
-    if (hiwItems.length > 0) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("show");
-                }
-            });
-        }, {});
-        hiwItems.forEach(el => observer.observe(el));
-    }
-
-});
-
-// ---- Show/Hide Password Function ----
-function togglePassword(inputId, button) {
-    const input = document.getElementById(inputId);
-    if (!input || !button) return;
-
-    if (input.type === 'password') {
-        input.type = 'text';
-        button.textContent = 'HIDE';
-    } else {
-        input.type = 'password';
-        button.textContent = 'SHOW';
-    }
 }
 
-// ---- HiW Gallery Scroll Buttons ----
-const gallery = document.getElementById('gallery');
-const btnLeft = document.getElementById('chevron-btn-left');
-const btnRight = document.getElementById('chevron-btn-right');
+function initHowItWorksAnimation() {
+    const hiwItems = document.querySelectorAll(".hiw-item");
 
-if (gallery) {
-    const scrollAmount = 400; // pixels per klik
+    if (hiwItems.length === 0) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("show");
+            }
+        });
+    });
+
+    hiwItems.forEach(el => observer.observe(el));
+}
+
+function initGalleryScrollButtons() {
+    const gallery = document.getElementById('gallery');
+    const btnLeft = document.getElementById('chevron-btn-left');
+    const btnRight = document.getElementById('chevron-btn-right');
+
+    if (!gallery) return;
+
+    const scrollAmount = 400;
 
     if (btnLeft) {
         btnLeft.addEventListener('click', () => {
@@ -100,77 +291,40 @@ if (gallery) {
     }
 }
 
-// ---- Passport handling ----
-function handleFileSelect(event) {
-    const file = event.target.files[0];
-    const fileInfo = document.getElementById('file-info');
-    const fileUploadText = document.getElementById('file-upload-text');
-    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+// ============================================================================
+// PROFILE PAGE
+// ============================================================================
 
-    if (file) {
-        // Check file size
-        if (file.size > maxSize) {
-            fileInfo.innerHTML = '<span style="color: #dc2c2c;">File size exceeds 5MB limit</span>';
-            event.target.value = ''; // Clear the file input
-            fileUploadText.textContent = 'Choose File';
-            return;
-        }
+function initLogoutButton() {
+    const logoutBtn = document.querySelector('.profile-button-row .logout-btn');
 
-        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
-        if (!validTypes.includes(file.type)) {
-            fileInfo.innerHTML = '<span style="color: #dc2c2c;">Invalid file type. Please upload JPG, PNG, or PDF</span>';
-            event.target.value = ''; // Clear the file input
-            fileUploadText.textContent = 'Choose File';
-            return;
-        }
+    if (!logoutBtn) return;
 
-        const fileSize = (file.size / 1024).toFixed(2);
-        fileUploadText.textContent = file.name;
-        fileInfo.innerHTML = `<span style="color: #2c72dc;">✓ ${file.name} (${fileSize} KB)</span>`;
-    } else {
-        fileUploadText.textContent = 'Choose File';
-        fileInfo.innerHTML = '';
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    let modal = document.getElementById("create-ticket-modal");
-    let btn = document.getElementById("openTicketModal");
-    let closeBtn = document.getElementsByClassName("close")[0];
-    let cancelBtn = document.getElementById("cancelBtn");
-
-    // Open modal
-    btn.onclick = function(e) {
-        e.preventDefault();
-        modal.style.display = "flex";
-        document.body.style.overflow = 'hidden';
-    }
-
-    // Close modal with X button
-    closeBtn.onclick = function() {
-        modal.style.display = "none";
-        document.body.style.overflow = 'auto';
-    }
-
-    // Close modal with Cancel button
-    cancelBtn.onclick = function() {
-        modal.style.display = "none";
-        document.body.style.overflow = 'auto';
-    }
-
-    // Close modal when clicking outside
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-            document.body.style.overflow = 'auto';
-        }
-    }
-
-    // Close modal on Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && modal.style.display === 'flex') {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
+    logoutBtn.addEventListener('click', () => {
+        const logoutForm = document.getElementById('logout-form');
+        if (logoutForm) {
+            logoutForm.submit();
         }
     });
+}
+
+// ============================================================================
+// INITIALIZATION
+// ============================================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Homepage features
+    initParallaxEffects();
+    initSmoothScroll();
+    initHowItWorksAnimation();
+    initGalleryScrollButtons();
+
+    // Profile features
+    initLogoutButton();
+
+    // Modal features
+    initCreateTicketModal();
+    initTicketModal();
+
+    console.log('✓ All scripts initialized');
 });
