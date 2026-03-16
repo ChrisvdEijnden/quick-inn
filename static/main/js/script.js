@@ -116,6 +116,8 @@ function initCreateTicketModal() {
     });
 }
 
+// Add this to your script.js - replace the initTicketModal function
+
 function initTicketModal() {
     const modal = document.getElementById("ticket-modal");
 
@@ -130,18 +132,29 @@ function initTicketModal() {
     const modalDates = document.getElementById("modal-ticket-dates");
     const modalQR = document.getElementById("modal-qr-code");
     const qrContainer = document.querySelector(".ticket-modal-qr");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const deleteBtn = document.querySelector(".delete-btn");  // ← Get delete button
+
+    // Track current ticket ID
+    let currentTicketId = null;  // ← Store ticket ID
 
     const closeModal = () => {
         modal.style.display = "none";
         document.body.style.overflow = "auto";
+        currentTicketId = null;
     };
+
+    if (cancelBtn) {
+        cancelBtn.onclick = closeModal;
+    }
 
     // Attach click handlers to all ticket cards
     document.querySelectorAll(".ticket").forEach((ticket) => {
         ticket.addEventListener("click", (e) => {
             e.preventDefault();
 
-            // Extract ticket data
+            // Extract ticket data - INCLUDING ID
+            const ticketId = ticket.getAttribute("data-id");  // ← Get ID
             const title = ticket.getAttribute("data-title");
             const city = ticket.getAttribute("data-city");
             const country = ticket.getAttribute("data-country");
@@ -149,7 +162,10 @@ function initTicketModal() {
             const checkout = ticket.getAttribute("data-checkout");
             const qrCode = ticket.getAttribute("data-qr");
 
-            console.log('Opening ticket:', title);
+            console.log('Opening ticket:', title, 'ID:', ticketId);
+
+            // Store the ticket ID
+            currentTicketId = ticketId;  // ← Save it
 
             // Populate modal content
             if (modalTitle) modalTitle.textContent = title;
@@ -203,7 +219,44 @@ function initTicketModal() {
             closeModal();
         }
     });
+
+    // Delete button handler - THE IMPORTANT PART
+    if (deleteBtn) {
+        deleteBtn.onclick = () => {
+            if (!currentTicketId) {
+                alert('No ticket selected');
+                return;
+            }
+
+            if (confirm('Are you sure you want to delete this ticket?')) {
+                // Create form
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/tickets/delete/';
+
+                // Add CSRF token
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrfmiddlewaretoken';
+                csrfInput.value = csrfToken;
+                form.appendChild(csrfInput);
+
+                // Add ticket ID
+                const idInput = document.createElement('input');
+                idInput.type = 'hidden';
+                idInput.name = 'ticket_id';
+                idInput.value = currentTicketId;
+                form.appendChild(idInput);
+
+                // Submit
+                document.body.appendChild(form);
+                form.submit();
+            }
+        };
+    }
 }
+
 
 // ============================================================================
 // HOMEPAGE EFFECTS

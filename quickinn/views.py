@@ -10,7 +10,41 @@ import qrcode
 from io import BytesIO
 import base64
 
+import json
+import os
+
 User = get_user_model()
+
+# Path to store tickets
+TICKETS_FILE = os.path.join(settings.BASE_DIR, 'tickets_data.json')
+
+
+def load_tickets():
+    """Load tickets from JSON file"""
+    if os.path.exists(TICKETS_FILE):
+        try:
+            with open(TICKETS_FILE, 'r') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, IOError):
+            return get_default_tickets()
+    return get_default_tickets()
+
+
+def save_tickets(tickets_list):
+    """Save tickets to JSON file"""
+    try:
+        with open(TICKETS_FILE, 'w') as f:
+            json.dump(tickets_list, f, indent=2)
+        return True
+    except IOError as e:
+        print(f"Error saving tickets: {e}")
+        return False
+
+
+def get_default_tickets():
+    with open("tickets_data.json", "r") as file:
+        data = json.load(file)
+    return data
 
 
 def home(request):
@@ -102,13 +136,36 @@ def get_hotel_image(hotel_name, city, country=None):
 
 
 def tickets(request):
+    # Load tickets from file
+    tickets_list = load_tickets()
+
     # Handle POST request for creating ticket
     if request.method == 'POST':
         hotel_name = request.POST.get('hotel_name', '').strip()
+        city = request.POST.get('city', '').strip()
+        country = request.POST.get('country', '').strip()
         checkin = request.POST.get('checkin', '').strip()
         checkout = request.POST.get('checkout', '').strip()
 
-        if hotel_name and checkin and checkout:
+        if hotel_name and city and country and checkin and checkout:
+            # Generate new ID
+            max_id = max([t['id'] for t in tickets_list]) if tickets_list else 0
+            new_id = max_id + 1
+
+            # Create new ticket
+            new_ticket = {
+                'id': new_id,
+                'title': hotel_name,
+                'city': city,
+                'country': country,
+                'checkin': checkin,
+                'checkout': checkout,
+            }
+
+            # Append to list and save
+            tickets_list.append(new_ticket)
+            save_tickets(tickets_list)
+
             messages.success(request, f'Ticket for {hotel_name} created successfully!')
         else:
             messages.error(request, 'Please fill in all fields.')
@@ -116,79 +173,65 @@ def tickets(request):
         return redirect('tickets')
 
     # GET request - display tickets
-    tickets_list = [
-        {
-            'id': 1,
-            'title': 'Burj Al Arab',
-            'city': 'Dubai',
-            'country': 'United Arab Emirates',
-            'checkin': '2026-03-15',
-            'checkout': '2026-03-17',
-        },
-        {
-            'id': 2,
-            'title': 'Marina Bay Sands',
-            'city': 'Singapore',
-            'country': 'Singapore',
-            'checkin': '2026-07-05',
-            'checkout': '2026-07-09',
-        },
-        {
-            'id': 3,
-            'title': 'The Ritz Paris',
-            'city': 'Paris',
-            'country': 'France',
-            'checkin': '2026-04-10',
-            'checkout': '2026-04-13',
-        },
-        {
-            'id': 4,
-            'title': 'Icehotel',
-            'city': 'Jukkasjärvi',
-            'country': 'Sweden',
-            'checkin': '2026-09-22',
-            'checkout': '2026-09-24',
-        },
-        {
-            'id': 5,
-            'title': 'The Plaza Hotel',
-            'city': 'New York',
-            'country': 'United States',
-            'checkin': '2026-11-25',
-            'checkout': '2026-11-27',
-        },
-    ]
-
+    # Create a display copy of tickets (don't modify original data)
+    display_tickets = []
     today = date.today()
+
     for ticket in tickets_list:
+        # Create a copy to avoid modifying original data
+        display_ticket = ticket.copy()
+
         checkin_date = datetime.strptime(ticket['checkin'], '%Y-%m-%d').date()
         checkout_date = datetime.strptime(ticket['checkout'], '%Y-%m-%d').date()
 
-        ticket['checkin_date'] = checkin_date
-        ticket['checkout_date'] = checkout_date
+        display_ticket['checkin_date'] = checkin_date
+        display_ticket['checkout_date'] = checkout_date
 
-        ticket['checkin_formatted'] = checkin_date.strftime('%a %d %b')
-        ticket['checkout_formatted'] = checkout_date.strftime('%a %d %b')
+        display_ticket['checkin_formatted'] = checkin_date.strftime('%a %d %b')
+        display_ticket['checkout_formatted'] = checkout_date.strftime('%a %d %b')
 
-        ticket['checkin_formatted_s'] = checkin_date.strftime('%d %b')
-        ticket['checkout_formatted_s'] = checkout_date.strftime('%d %b')
+        display_ticket['checkin_formatted_s'] = checkin_date.strftime('%d %b')
+        display_ticket['checkout_formatted_s'] = checkout_date.strftime('%d %b')
 
-        ticket['is_expired'] = checkout_date < today
+        display_ticket['is_expired'] = checkout_date < today
 
         # Fetch hotel image
-        ticket['image_url'] = get_hotel_image(ticket['title'], ticket['city'])
+        display_ticket['image_url'] = get_hotel_image(ticket['title'], ticket['city'])
 
         # Generate QR code with ticket information
         qr_data = f"Hotel: {ticket['title']}\nCity: {ticket['city']}, {ticket['country']}\nCheck-in: {ticket['checkin']}\nCheck-out: {ticket['checkout']}\nBooking ID: {ticket['id']}"
-        ticket['qr_code'] = generate_qr_code(qr_data)
+        display_ticket['qr_code'] = generate_qr_code(qr_data)
+
+        display_tickets.append(display_ticket)
 
     # Sort by check-in date (earliest first)
-    tickets_list.sort(key=lambda x: x['checkin_date'])
+    display_tickets.sort(key=lambda x: x['checkin_date'])
 
     return render(request, 'main/tickets.html', {
-        "tickets": tickets_list,
+        "tickets": display_tickets,
         "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY,
     })
+
+
+def delete_ticket(request):
+    """Delete a ticket from the file"""
+    if request.method == 'POST':
+        ticket_id = request.POST.get('ticket_id')
+
+        if ticket_id:
+            try:
+                ticket_id = int(ticket_id)
+                tickets_list = load_tickets()  # Load from JSON
+
+                # Remove the ticket
+                tickets_list = [t for t in tickets_list if t['id'] != ticket_id]
+
+                save_tickets(tickets_list)  # Save back to JSON
+                messages.success(request, 'Ticket deleted successfully!')
+            except (ValueError, TypeError):
+                messages.error(request, 'Invalid ticket ID.')
+
+    return redirect('tickets')
 
 
 @login_required

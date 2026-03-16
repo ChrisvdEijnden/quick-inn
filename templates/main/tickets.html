@@ -15,6 +15,7 @@
         {% for ticket in tickets %}
         <a href="#"
            class="ticket"
+           data-id="{{ ticket.id }}"
            data-title="{{ ticket.title }}"
            data-city="{{ ticket.city }}"
            data-country="{{ ticket.country }}"
@@ -60,6 +61,11 @@
                 <div id="modal-map"></div>
             </div>
         </div>
+
+        <div class="modal-buttons">
+            <button type="button" class="modal-btn cancel-btn" id="cancelBtn">Cancel</button>
+            <button type="submit" class="modal-btn delete-btn">Delete Ticket</button>
+        </div>
     </div>
 </div>
 
@@ -79,6 +85,11 @@
             <div class="form-group">
                 <label for="city">CITY</label>
                 <input type="text" id="city" name="city" required>
+            </div>
+
+            <div class="form-group">
+                <label for="country">COUNTRY</label>
+                <input type="text" id="country" name="country" required>
             </div>
 
             <div class="form-row">

@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "title": "Burj Al Arab",
+    "city": "Dubai",
+    "country": "United Arab Emirates",
+    "checkin": "2026-03-15",
+    "checkout": "2026-03-17"
+  },
+  {
+    "id": 2,
+    "title": "Marina Bay Sands",
+    "city": "Singapore",
+    "country": "Singapore",
+    "checkin": "2026-07-05",
+    "checkout": "2026-07-09"
+  },
+  {
+    "id": 3,
+    "title": "The Ritz Paris",
+    "city": "Paris",
+    "country": "France",
+    "checkin": "2026-04-10",
+    "checkout": "2026-04-13"
+  },
+  {
+    "id": 4,
+    "title": "Icehotel",
+    "city": "Jukkasj\u00e4rvi",
+    "country": "Sweden",
+    "checkin": "2026-09-22",
+    "checkout": "2026-09-24"
+  },
+  {
+    "id": 5,
+    "title": "The Plaza Hotel",
+    "city": "New York",
+    "country": "United States",
+    "checkin": "2026-11-25",
+    "checkout": "2026-11-27"
+  }
+]

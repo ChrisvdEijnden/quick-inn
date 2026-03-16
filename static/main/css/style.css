@@ -669,7 +669,7 @@ p {
     height: 300px;
     border-radius: 12px;
     overflow: hidden;
-    border: 2px solid #0020a1;
+    border: 2px solid #f8f9fa;
 }
 
 #modal-map {
@@ -772,12 +772,12 @@ p {
     transition: all 0.2s ease;
 }
 
-.create-btn {
+.create-btn, .delete-btn {
     background-color: #000;
     color: #fff;
 }
 
-.create-btn:hover {
+.create-btn:hover, .delete-btn:hover {
     background-color: #002197;
     border-color: #002197;
 }
@@ -792,7 +792,6 @@ p {
     border-color: #002197;
     color: #002197;
 }
-
 
 /* ============================================================================
    PROFILE PAGE
