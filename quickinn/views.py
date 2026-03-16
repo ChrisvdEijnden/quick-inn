@@ -68,9 +68,10 @@ def get_hotel_image(hotel_name, city, country=None):
 
         # List of query attempts in order of preference
         queries = [
-            f'{hotel_name}, {city}',  # Most specific
             hotel_name,  # Hotel only
+            f'{hotel_name}, {city}',  # Most specific
             city,  # City only
+            country,
         ]
 
         # Add country if provided
